@@ -10,14 +10,15 @@ public class Player : StateMachineCore
     [field: Header("States")]
     [field: SerializeField] public PlayerIdle idle { get; private set; }
     [field: SerializeField] public PlayerMove move { get; private set; }
+    [field: SerializeField] public PlayerAttack attack { get; private set; }
 
     [Header("Components")] 
     [SerializeField] public PlayerInput playerInput;
-
+    [SerializeField] public Transform pivot;
     [SerializeField] public PlayerStats stats;
     [SerializeField] private float speed;
     
-    [FormerlySerializedAs("moveinput")] [FormerlySerializedAs("lastMoveDir")] public Vector2 moveInput;
+    public Vector2 lastMoveDir;
     
     // Start is called before the first frame update
     void Start()
@@ -32,7 +33,7 @@ public class Player : StateMachineCore
         HandleTransitions();
         if (playerInput.moveVector != Vector2.zero)
         {
-            moveInput = playerInput.moveVector;
+            lastMoveDir = playerInput.moveVector;
         }
         stateMachine.currentState.DoUpdateBranch();
     }
@@ -44,13 +45,21 @@ public class Player : StateMachineCore
 
     private void HandleTransitions()
     {
-        if (stateMachine.currentState == idle && playerInput.moveVector != Vector2.zero)
+        
+        if ((stateMachine.currentState == move || stateMachine.currentState == idle) &&
+            playerInput.attackPressedDownThisFrame)
+        {
+            stateMachine.SetState(attack);
+            return;
+        }
+        
+        if ((stateMachine.currentState == idle || stateMachine.currentState.isComplete) && playerInput.moveVector != Vector2.zero)
         {
             stateMachine.SetState(move);
             return;
         }
 
-        if (stateMachine.currentState == move && playerInput.moveVector == Vector2.zero)
+        if ((stateMachine.currentState == move || stateMachine.currentState.isComplete) && playerInput.moveVector == Vector2.zero)
         {
             stateMachine.SetState(idle);
             return;

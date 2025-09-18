@@ -2,17 +2,14 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PlayerIdle : State
+public class PlayerAttack : State
 {
     [SerializeField] private AnimationClip up, side, down;
     [SerializeField] private Player player;
+    [SerializeField] private float attackTime = 0.5f;
+
 
     public override void DoEnterState()
-    {
-        rb.velocity = new Vector2(0, 0);
-        base.DoEnterState();
-    }
-    public override void DoUpdateState()
     {
         if (Mathf.Abs(player.lastMoveDir.x) > Mathf.Abs(player.lastMoveDir.y))
         {
@@ -29,6 +26,18 @@ public class PlayerIdle : State
             else
                 animator.Play(down.name);
         }
+        base.DoEnterState();
+    }
+    public override void DoUpdateState()
+    {
+        Vector2 moveInput = player.playerInput.moveVector.normalized;
+        rb.velocity = moveInput * player.stats.moveSpeed;
+        
+        if (stateUptime > attackTime)
+        {
+            isComplete = true;
+        }
+        
         base.DoUpdateState();
     }
 }

@@ -40,10 +40,10 @@ public class PlayerInput : MonoBehaviour
             timeOfLastMoveInput = Time.time;
         }
         
-        // // Attack
-        // attackPressedDownThisFrame = playerActionMap.FindAction("Attack").WasPerformedThisFrame();
-        // attackHeld = playerActionMap.FindAction("Attack").ReadValue<float>() > 0;
-        // attackReleasedThisFrame = playerActionMap.FindAction("Attack").WasReleasedThisFrame();
+        // Attack
+        attackPressedDownThisFrame = playerActionMap.FindAction("Attack").WasPerformedThisFrame();
+        attackHeld = playerActionMap.FindAction("Attack").ReadValue<float>() > 0;
+        attackReleasedThisFrame = playerActionMap.FindAction("Attack").WasReleasedThisFrame();
         //
         // // Sprint
         // sprintHeld = playerActionMap.FindAction("Sprint").ReadValue<float>() > 0;

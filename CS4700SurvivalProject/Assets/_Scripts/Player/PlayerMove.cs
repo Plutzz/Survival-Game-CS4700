@@ -5,7 +5,7 @@ using UnityEngine;
 public class PlayerMove : State
 {
     [SerializeField] private Player player;
-    [SerializeField] private AnimationClip up, down, left, right;
+    [SerializeField] private AnimationClip up, side, down;
     private PlayerStats stats => player.stats;
     private PlayerInput input => player.playerInput;
     public override void DoUpdateState()
@@ -15,10 +15,11 @@ public class PlayerMove : State
         
         if (Mathf.Abs(moveInput.x) > Mathf.Abs(moveInput.y))
         {
+            animator.Play(side.name);
             if (moveInput.x > 0)
-                animator.Play(right.name);
+                player.pivot.localScale = new Vector3(1f, 1f, 1f);
             else
-                animator.Play(left.name);
+                player.pivot.localScale = new Vector3(-1f, 1f, 1f);
         }
         else
         {
