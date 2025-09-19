@@ -35,6 +35,7 @@ public class SelectedBar : MonoBehaviour
 
         if (Input.GetKeyDown(KeyCode.Return))
         {
+            options[optionIndex].GetComponentInChildren<MMF_Player>()?.PlayFeedbacks();
             MainMenuManager.Instance.SelectOption(optionIndex);
         }
     }
