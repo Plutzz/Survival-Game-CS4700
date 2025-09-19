@@ -29,7 +29,7 @@ public class InventoryManager : MonoBehaviour
         float scroll = Input.GetAxis("Mouse ScrollWheel");
         if (scroll != 0)
         {
-            int newValue = selectedSlot + (int)(scroll / Mathf.Abs(scroll));
+            int newValue = selectedSlot - (int)(scroll / Mathf.Abs(scroll));
             if (newValue < 0)
             {
                 newValue = inventorySlots.Length - 1;
@@ -48,7 +48,7 @@ public class InventoryManager : MonoBehaviour
         {
             inventorySlots[selectedSlot].Deselect();
         }
-        
+
         inventorySlots[newValue].Select();
         selectedSlot = newValue;
     }
@@ -88,5 +88,29 @@ public class InventoryManager : MonoBehaviour
         GameObject newItemGo = Instantiate(InventoryItemPrefab, slot.transform);
         InventoryItem inventoryItem = newItemGo.GetComponent<InventoryItem>();
         inventoryItem.InitializeItem(item);
+    }
+
+    public Item GetSelectedItem(bool use)
+    {
+        InventorySlot slot = inventorySlots[selectedSlot];
+        InventoryItem itemInSlot = slot.GetComponentInChildren<InventoryItem>();
+        if (itemInSlot != null)
+        {
+            Item item = itemInSlot.item;
+            if (use)
+            {
+                itemInSlot.count--;
+                if (itemInSlot.count <= 0)
+                {
+                    Destroy(itemInSlot.gameObject);
+                }
+                else
+                {
+                    itemInSlot.RefreshCount();
+                }
+            }
+            return item;
+        }
+        return null;
     }
 }
