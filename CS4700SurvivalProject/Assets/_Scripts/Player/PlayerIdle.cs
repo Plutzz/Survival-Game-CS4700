@@ -14,16 +14,16 @@ public class PlayerIdle : State
     }
     public override void DoUpdateState()
     {
-        if (Mathf.Abs(player.lastMoveDir.x) > Mathf.Abs(player.lastMoveDir.y))
+        if (Mathf.Abs(player.lookDir.x) > Mathf.Abs(player.lookDir.y))
         {
-            if (player.lastMoveDir.x > 0)
+            if (player.lookDir.x > 0)
                 animator.Play(right.name);
             else
                 animator.Play(left.name);
         }
         else
         {
-            if (player.lastMoveDir.y > 0)
+            if (player.lookDir.y > 0)
                 animator.Play(up.name);
             else
                 animator.Play(down.name);

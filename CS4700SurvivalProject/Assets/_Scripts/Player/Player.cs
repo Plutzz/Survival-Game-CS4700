@@ -18,7 +18,7 @@ public class Player : StateMachineCore
     [SerializeField] public PlayerStats stats;
     [SerializeField] private float speed;
     
-    public Vector2 lastMoveDir;
+    public Vector2 lookDir;
     
     // Start is called before the first frame update
     void Start()
@@ -31,10 +31,7 @@ public class Player : StateMachineCore
     void Update()
     {
         HandleTransitions();
-        if (playerInput.moveVector != Vector2.zero)
-        {
-            lastMoveDir = playerInput.moveVector;
-        }
+        lookDir = (Camera.main.ScreenToWorldPoint(Input.mousePosition) - transform.position).normalized;
         stateMachine.currentState.DoUpdateBranch();
     }
 

@@ -13,10 +13,10 @@ public class PlayerAttack : State
     public override void DoEnterState()
     {
         weaponSprite.SetActive(true);
-        if (Mathf.Abs(player.lastMoveDir.x) > Mathf.Abs(player.lastMoveDir.y))
+        if (Mathf.Abs(player.lookDir.x) > Mathf.Abs(player.lookDir.y))
         {
 
-            if (player.lastMoveDir.x > 0)
+            if (player.lookDir.x > 0)
             {
                 weaponSprite.transform.localPosition = new Vector3(-Mathf.Abs(weaponSprite.transform.localPosition.x),
                     weaponSprite.transform.localPosition.y, weaponSprite.transform.localPosition.z);
@@ -35,7 +35,7 @@ public class PlayerAttack : State
         }
         else
         {
-            if (player.lastMoveDir.y > 0)
+            if (player.lookDir.y > 0)
             {
                 weaponSprite.transform.localPosition = new Vector3(Mathf.Abs(weaponSprite.transform.localPosition.x),
                     weaponSprite.transform.localPosition.y, weaponSprite.transform.localPosition.z);
