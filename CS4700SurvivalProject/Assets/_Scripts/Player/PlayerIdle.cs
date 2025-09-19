@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class PlayerIdle : State
 {
-    [SerializeField] private AnimationClip up, side, down;
+    [SerializeField] private AnimationClip up, right, left, down;
     [SerializeField] private Player player;
 
     public override void DoEnterState()
@@ -16,11 +16,10 @@ public class PlayerIdle : State
     {
         if (Mathf.Abs(player.lastMoveDir.x) > Mathf.Abs(player.lastMoveDir.y))
         {
-            animator.Play(side.name);
             if (player.lastMoveDir.x > 0)
-                player.pivot.localScale = new Vector3(1f, 1f, 1f);
+                animator.Play(right.name);
             else
-                player.pivot.localScale = new Vector3(-1f, 1f, 1f);
+                animator.Play(left.name);
         }
         else
         {
