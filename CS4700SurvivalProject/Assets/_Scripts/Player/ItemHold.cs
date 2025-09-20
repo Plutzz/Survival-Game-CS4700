@@ -36,7 +36,6 @@ public class ItemHold : MonoBehaviour
 
     private void SetItemPosition(ItemHoldPosition position)
     {
-        Debug.Log("SetItemPosition");
         transform.localPosition = position.localPosition;
         transform.localEulerAngles = new Vector3(0, 0, position.rotation);
         itemSpriteRenderer.flipX = position.flipX;
