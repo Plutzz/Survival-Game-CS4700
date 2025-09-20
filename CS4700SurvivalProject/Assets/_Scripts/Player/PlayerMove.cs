@@ -42,6 +42,7 @@ public class PlayerMove : State
 
     public override void DoExitState()
     {
+        Debug.Log("Reset Item Hold");
         itemHold.localPosition = new Vector3(0, 0, 0);
         base.DoExitState();
     }
