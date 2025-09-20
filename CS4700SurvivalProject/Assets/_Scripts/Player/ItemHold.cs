@@ -13,6 +13,9 @@ public class ItemHold : MonoBehaviour
     private ItemHoldPosition currentPosition;
     private void Update()
     {
+        if (player.stateMachine.currentState is PlayerAttack) return;
+        
+        
         if (Mathf.Abs(player.lookDir.x) > Mathf.Abs(player.lookDir.y))
         {
 
