@@ -19,7 +19,9 @@ public class PlayerMove : State
         rb.velocity = moveInput * stats.moveSpeed;
         
         // Item Bob
+        float step = 1f / 16f; // 0.0625
         float newY = Mathf.Sin(Time.time * itemBobSpeed) * itemBobAmount;
+        newY = Mathf.Round(newY / step) * step;
         itemHold.localPosition = new Vector3(0, newY, 0);
         
         if (Mathf.Abs(player.lookDir.x) > Mathf.Abs(player.lookDir.y))
