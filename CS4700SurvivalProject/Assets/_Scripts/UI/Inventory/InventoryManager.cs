@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class InventoryManager : MonoBehaviour
+public class InventoryManager : SingletonPersistent<InventoryManager>
 {
     public int maxStackedItems = 4;
     public InventorySlot[] inventorySlots;
