@@ -8,11 +8,12 @@ public class PlayerAttack : State
     [SerializeField] private AnimationClip up, right, left, down;
     [SerializeField] private Player player;
     [SerializeField] private float attackTime = 0.5f;
-    [SerializeField] private GameObject weaponHitbox;
+    [SerializeField] private DamageBox weaponHitbox;
 
     public override void DoEnterState()
     {
-        weaponHitbox.SetActive(true);
+        weaponHitbox.gameObject.SetActive(true);
+        weaponHitbox.ClearHasBeenDamaged();
         if (Mathf.Abs(player.lookDir.x) > Mathf.Abs(player.lookDir.y))
         {
 
@@ -53,7 +54,7 @@ public class PlayerAttack : State
 
     public override void DoExitState()
     {
-        weaponHitbox.SetActive(false);
+        weaponHitbox.gameObject.SetActive(false);
         base.DoExitState();
     }
     public override void DoUpdateState()
