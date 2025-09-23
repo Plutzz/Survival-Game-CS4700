@@ -22,6 +22,7 @@ public class MainMenuManager : Singleton<MainMenuManager>
                 break;
             // Options
             case 1:
+                OpenMenu(4);
                 break;
             // Exit Game
             case 2:
@@ -95,6 +96,60 @@ public class MainMenuManager : Singleton<MainMenuManager>
                 break;
         }
     }
+    
+    public void SettingsMenuSelectOptions()
+    {
+        switch (optionIndex)
+        {
+            // Video Settings
+            case 0:
+                OpenMenu(5);
+                break;
+            // Audio Settings
+            case 1:
+                OpenMenu(6);
+                break;
+            // Gameplay Settings
+            case 2:
+                OpenMenu(7);
+                break;
+            // Back
+            case 3:
+                OpenMenu(0);
+                break;
+        }
+    }
+    public void VideoSettingsMenuSelectOptions()
+    {
+        switch (optionIndex)
+        {
+            // Back
+            case 0:
+                OpenMenu(4);
+                break;
+        }
+    }
+    public void AudioSettingsMenuSelectOptions()
+    {
+        switch (optionIndex)
+        {
+            // Back
+            case 0:
+                OpenMenu(4);
+                break;
+        }
+    }
+    public void GameplaySettingsMenuSelectOptions()
+    {
+        switch (optionIndex)
+        {
+            // Back
+            case 0:
+                OpenMenu(4);
+                break;
+        }
+    }
+    
 
     private void OpenMenu(int index)
     {
