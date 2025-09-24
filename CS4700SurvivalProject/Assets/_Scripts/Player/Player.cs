@@ -31,7 +31,10 @@ public class Player : StateMachineCore
     void Update()
     {
         HandleTransitions();
-        lookDir = (Camera.main.ScreenToWorldPoint(Input.mousePosition) - transform.position).normalized;
+        if (!PauseMenuManager.Instance.isGamePaused)
+        {
+            lookDir = (Camera.main.ScreenToWorldPoint(Input.mousePosition) - transform.position).normalized;
+        }
         stateMachine.currentState.DoUpdateBranch();
     }
 
