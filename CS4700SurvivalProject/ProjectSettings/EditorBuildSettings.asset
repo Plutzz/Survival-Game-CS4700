@@ -29,5 +29,8 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Feel/MMTools/Core/MMSceneLoading/LoadingScreens/MMAdditiveLoadingScreenFastFade.unity
     guid: 8101c376367d6e44f84e602722e5ac10
+  - enabled: 1
+    path: Assets/Scenes/MainMenu.unity
+    guid: 99de18997c22e6941a465d3b0768e17e
   m_configObjects:
     com.unity.input.settings.actions: {fileID: -944628639613478452, guid: 88485d5669fcf5b44b5773d32d934196, type: 3}

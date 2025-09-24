@@ -2,11 +2,13 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
+using TMPro;
 
 public class PauseMenuManager : Singleton<PauseMenuManager>
 {
     [SerializeField] private UnityEvent onPause, onUnpause;
     [SerializeField] private GameObject pauseMenuCanvas;
+    [SerializeField] private TextMeshProUGUI joinCodeText;
     [HideInInspector] public bool isGamePaused = false;
     // Start is called before the first frame update
     void Start()
@@ -33,6 +35,7 @@ public class PauseMenuManager : Singleton<PauseMenuManager>
     void PauseGame()
     {
         isGamePaused = true;
+        joinCodeText.text = "Join Code: " + RelayManager.Instance.joinCode;
         pauseMenuCanvas.SetActive(true);
         onPause?.Invoke();
     }

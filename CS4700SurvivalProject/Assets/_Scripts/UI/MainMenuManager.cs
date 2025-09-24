@@ -60,14 +60,17 @@ public class MainMenuManager : Singleton<MainMenuManager>
         {
             // Save1
             case 0:
+                HostGame();
                 loadScenePlayer.PlayFeedbacks();
                 break;
             // Save2
             case 1:
+                HostGame();
                 loadScenePlayer.PlayFeedbacks();
                 break;
             // Save3
             case 2:
+                HostGame();
                 loadScenePlayer.PlayFeedbacks();
                 break;
             // Back to Join/Host
@@ -169,5 +172,19 @@ public class MainMenuManager : Singleton<MainMenuManager>
     public void StopTyping()
     {
         isTyping = false;
+    }
+
+    private async void HostGame()
+    {
+        string joinCode = await RelayManager.Instance.CreateRelay();
+        if (joinCode != null)
+        {
+            // Show this on UI so your friend can enter it
+            Debug.Log("Game started! Share join code: " + joinCode);
+        }
+        else
+        {
+            Debug.LogError("Something went wrong while hosting game");
+        }
     }
 }
