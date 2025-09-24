@@ -1,35 +1,34 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 public class PlayerAttack : State
 {
     [SerializeField] private AnimationClip up, right, left, down;
     [SerializeField] private Player player;
     [SerializeField] private float attackTime = 0.5f;
-    [SerializeField] private GameObject weaponSprite, weaponPivot;
-    [SerializeField] private WeaponAttack weapon;
+    [SerializeField] private DamageBox weaponHitbox;
 
     public override void DoEnterState()
     {
-        weaponSprite.SetActive(true);
+        weaponHitbox.gameObject.SetActive(true);
+        weaponHitbox.ClearHasBeenDamaged();
         if (Mathf.Abs(player.lookDir.x) > Mathf.Abs(player.lookDir.y))
         {
 
             if (player.lookDir.x > 0)
             {
-                weaponSprite.transform.localPosition = new Vector3(-Mathf.Abs(weaponSprite.transform.localPosition.x),
-                    weaponSprite.transform.localPosition.y, weaponSprite.transform.localPosition.z);
+                weaponHitbox.transform.localPosition = new Vector3(-Mathf.Abs(weaponHitbox.transform.localPosition.x),
+                    weaponHitbox.transform.localPosition.y, weaponHitbox.transform.localPosition.z);
                 animator.Play(right.name);
-                weaponPivot.transform.localEulerAngles = new Vector3(0, 0, 90);
             }
 
             else
             {
-                weaponSprite.transform.localPosition = new Vector3(Mathf.Abs(weaponSprite.transform.localPosition.x),
-                    weaponSprite.transform.localPosition.y, weaponSprite.transform.localPosition.z);
+                weaponHitbox.transform.localPosition = new Vector3(Mathf.Abs(weaponHitbox.transform.localPosition.x),
+                    weaponHitbox.transform.localPosition.y, weaponHitbox.transform.localPosition.z);
                 animator.Play(left.name);
-                weaponPivot.transform.localEulerAngles = new Vector3(0, 0, -90);
             }
                 
         }
@@ -37,28 +36,25 @@ public class PlayerAttack : State
         {
             if (player.lookDir.y > 0)
             {
-                weaponSprite.transform.localPosition = new Vector3(Mathf.Abs(weaponSprite.transform.localPosition.x),
-                    weaponSprite.transform.localPosition.y, weaponSprite.transform.localPosition.z);
+                weaponHitbox.transform.localPosition = new Vector3(Mathf.Abs(weaponHitbox.transform.localPosition.x),
+                    weaponHitbox.transform.localPosition.y, weaponHitbox.transform.localPosition.z);
                 animator.Play(up.name);
-                weaponPivot.transform.localEulerAngles = new Vector3(0, 0, 180);
             }
 
             else
             {
-                weaponSprite.transform.localPosition = new Vector3(-Mathf.Abs(weaponSprite.transform.localPosition.x),
-                    weaponSprite.transform.localPosition.y, weaponSprite.transform.localPosition.z);
+                weaponHitbox.transform.localPosition = new Vector3(-Mathf.Abs(weaponHitbox.transform.localPosition.x),
+                    weaponHitbox.transform.localPosition.y, weaponHitbox.transform.localPosition.z);
                 animator.Play(down.name);
-                weaponPivot.transform.localEulerAngles = new Vector3(0, 0, 0);
             }
                 
         }
-        weapon.Attack();
         base.DoEnterState();
     }
 
     public override void DoExitState()
     {
-        weaponSprite.SetActive(false);
+        weaponHitbox.gameObject.SetActive(false);
         base.DoExitState();
     }
     public override void DoUpdateState()

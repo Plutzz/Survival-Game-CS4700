@@ -28,6 +28,16 @@ public class PlayerInput : MonoBehaviour
         playerInputAction.Disable();
     }
 
+    public void EnablePlayerInput()
+    {
+        playerInputAction.Enable();
+    }
+
+    public void DisablePlayerInput()
+    {
+        playerInputAction.Disable();
+    }
+
 
     void Update()
     {

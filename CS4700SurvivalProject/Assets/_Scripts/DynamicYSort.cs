@@ -7,11 +7,6 @@ public class DynamicYSort : MonoBehaviour
 {
     private int _baseSortingOrder;
     [SerializeField] private SortableSprite[] _sortableSprites;
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
 
     // Update is called once per frame
     void Update()
@@ -20,6 +15,22 @@ public class DynamicYSort : MonoBehaviour
         foreach (var sortableSprite in _sortableSprites)
         {
             sortableSprite.spriteRenderer.sortingOrder = _baseSortingOrder + sortableSprite.relativeOrder;
+        }
+    }
+
+    public void SetSortingOrder(int sortingOrder, SpriteRenderer sr)
+    {
+        for(int i = 0; i < _sortableSprites.Length; i++)
+        {
+            if (_sortableSprites[i].spriteRenderer == sr)
+            {
+                _sortableSprites[i] = new SortableSprite
+                {
+                    spriteRenderer = sr,
+                    relativeOrder = sortingOrder
+                };
+                return;
+            }
         }
     }
 
