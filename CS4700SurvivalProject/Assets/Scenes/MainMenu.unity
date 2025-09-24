@@ -2686,6 +2686,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   inputDisplay: {fileID: 940807267}
   promptText: 'Join Code: '
+  currentInput: 
 --- !u!1 &1038824921
 GameObject:
   m_ObjectHideFlags: 0
@@ -3122,7 +3123,7 @@ MonoBehaviour:
   NetworkConfig:
     ProtocolVersion: 0
     NetworkTransport: {fileID: 1174490542}
-    PlayerPrefab: {fileID: 0}
+    PlayerPrefab: {fileID: 9123789016530738420, guid: b8c1254f4fdfc6e4691c026cdfa11184, type: 3}
     Prefabs:
       NetworkPrefabsLists:
       - {fileID: 11400000, guid: 2f3aabcd9e5474e408094e9508ad9fe0, type: 2}

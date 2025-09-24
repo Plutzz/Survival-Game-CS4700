@@ -48,4 +48,33 @@ public class RelayManager : SingletonPersistent<RelayManager>
             return null;
         }
     }
+    
+    public async Task<bool> JoinRelay(string joinCode)
+    {
+        try
+        {
+            JoinAllocation allocation = await RelayService.Instance.JoinAllocationAsync(joinCode);
+
+            var transport = NetworkManager.Singleton.GetComponent<Unity.Netcode.Transports.UTP.UnityTransport>();
+            transport.SetRelayServerData(
+                allocation.RelayServer.IpV4,
+                (ushort)allocation.RelayServer.Port,
+                allocation.AllocationIdBytes,
+                allocation.Key,
+                allocation.ConnectionData,
+                allocation.HostConnectionData
+            );
+
+            NetworkManager.Singleton.StartClient();
+            Debug.Log("Joined Relay with code: " + joinCode);
+            return true;
+        }
+        catch (RelayServiceException e)
+        {
+            Debug.LogError("Failed to join relay: " + e.Message);
+            return false;
+        }
+    }
+
+
 }
