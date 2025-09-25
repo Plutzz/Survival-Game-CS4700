@@ -80,7 +80,7 @@ public class MainMenuManager : Singleton<MainMenuManager>
         }
     }
     
-    public void JoinGameSelectOption()
+    public async void JoinGameSelectOption()
     {
         switch (optionIndex)
         {
@@ -91,7 +91,16 @@ public class MainMenuManager : Singleton<MainMenuManager>
                 break;
             // Save2
             case 1:
-                loadScenePlayer.PlayFeedbacks();
+                bool joined = await RelayManager.Instance.JoinRelay(joinCodeTextInput.currentInput);
+                if (joined)
+                {
+                    loadScenePlayer.PlayFeedbacks();
+                }
+                else
+                {
+                    // TODO: Show error feedback (e.g., flash red text, play error sound)
+                    Debug.Log("Invalid code entered!");
+                }
                 break;
             // Back to Join/Host
             case 2:

@@ -6,7 +6,7 @@ public class MenuTextInput : MonoBehaviour
 {
     public TMP_Text inputDisplay;   // Assign in Inspector
     [SerializeField] private string promptText = "";
-    private string currentInput = "";
+    public string currentInput = "";
     
     private float blinkTime = 0.5f;
     private float timer;
