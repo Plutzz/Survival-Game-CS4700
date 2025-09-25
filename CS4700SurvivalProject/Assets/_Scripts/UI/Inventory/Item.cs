@@ -6,6 +6,7 @@ using UnityEngine.Tilemaps;
 [CreateAssetMenu(menuName = "Scriptable Object/Item")]
 public class Item : ScriptableObject
 {
+    public int ID;
     public TileBase tile;
     public ItemType type;
     public ActionType actionType;

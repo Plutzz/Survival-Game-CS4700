@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class InventoryManager : SingletonPersistent<InventoryManager>
 {
+    private ItemDictionary itemDictionary; //for later
     public int maxStackedItems = 4;
     public InventorySlot[] inventorySlots;
     public GameObject InventoryItemPrefab;
@@ -113,4 +114,5 @@ public class InventoryManager : SingletonPersistent<InventoryManager>
         }
         return null;
     }
+
 }

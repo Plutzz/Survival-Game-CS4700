@@ -24,6 +24,8 @@ public class InventorySlot : MonoBehaviour, IDropHandler
 
     public void OnDrop(PointerEventData eventData)
     {
+        if (!OpenInventory.InventoryOpen)
+            return;
         if (transform.childCount == 0)
         {
             GameObject dropped = eventData.pointerDrag;
