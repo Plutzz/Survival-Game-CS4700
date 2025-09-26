@@ -2740,15 +2740,15 @@ Camera:
   m_LensShift: {x: 0, y: 0}
   m_NormalizedViewPortRect:
     serializedVersion: 2
-    x: 0
+    x: 0.0024405124
     y: 0
-    width: 0.99935615
+    width: 0.9945088
     height: 0.99999994
   near clip plane: 0.3
   far clip plane: 1000
   field of view: 34
   orthographic: 1
-  orthographic size: 5
+  orthographic size: 5.75
   m_Depth: -1
   m_CullingMask:
     serializedVersion: 2
@@ -47328,7 +47328,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 0, g: 0, b: 0, a: 1}
+  m_Color: {r: 0, g: 0, b: 0, a: 0}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -49608,6 +49608,10 @@ PrefabInstance:
     - target: {fileID: 3606292046495630462, guid: b8c1254f4fdfc6e4691c026cdfa11184, type: 3}
       propertyPath: right.localPosition.y
       value: -0.375
+      objectReference: {fileID: 0}
+    - target: {fileID: 5244514017889247412, guid: b8c1254f4fdfc6e4691c026cdfa11184, type: 3}
+      propertyPath: GlobalObjectIdHash
+      value: 3596229712
       objectReference: {fileID: 0}
     - target: {fileID: 7956745116403458638, guid: b8c1254f4fdfc6e4691c026cdfa11184, type: 3}
       propertyPath: m_LocalPosition.x

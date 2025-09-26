@@ -171,6 +171,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   image: {fileID: 2171556697732047497}
   countText: {fileID: 5183605147660625820}
+  itemDropPrefab: {fileID: 449895116576873272, guid: 6d577c508866d4c4483a2faf74f3da89, type: 3}
   item: {fileID: 0}
   count: 1
   parentAfterDrag: {fileID: 0}

@@ -19,10 +19,18 @@ public class ItemPickup : MonoBehaviour
             ApplyDefinition();
     }
 
+    public void Initialize(Item newItem, int newCount = 1)
+    {
+        itemDefinition = newItem;
+        count = newCount;
+        ApplyDefinition(); 
+    }
+
     private void OnTriggerEnter2D(Collider2D collision)
     {
         if (collision.CompareTag("Player"))
         {
+            Debug.Log("Player touched " + itemDefinition.name);
             AttemptPickup();
         }
     }

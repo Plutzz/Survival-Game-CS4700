@@ -13,10 +13,11 @@ public class InventoryItem : MonoBehaviour, IBeginDragHandler, IDragHandler, IEn
     [Header("UI")]
     public Image image;
     public Text countText;
-
+    public GameObject itemDropPrefab;
     [HideInInspector] public Item item;
     [HideInInspector] public int count = 1;
     [HideInInspector] public Transform parentAfterDrag;
+    
     // Local guard so OnDrag/OnEndDrag only act when a drag was allowed to start.
     bool draggingAllowed = false;
 
@@ -73,8 +74,18 @@ public class InventoryItem : MonoBehaviour, IBeginDragHandler, IDragHandler, IEn
     {
         if (!draggingAllowed) return;
         // Restore to original parent and re-enable raycasts. Be defensive in case parentAfterDrag was lost.
-        if (parentAfterDrag != null)
-            transform.SetParent(parentAfterDrag);
+
+        if (IsWithinInventory(eventData.position))
+        {
+            if (parentAfterDrag != null)
+                transform.SetParent(parentAfterDrag);
+        }
+        else
+        {
+            DropItem();
+            Debug.Log("Dropped outside inventory!");
+        }
+        
         if (image != null)
             image.raycastTarget = true;
         Debug.Log("end drag");
@@ -107,4 +118,37 @@ public class InventoryItem : MonoBehaviour, IBeginDragHandler, IDragHandler, IEn
             OnEndDrag(eventData);
     }
 
+    bool IsWithinInventory(Vector2 mousePosition)
+    {
+        RectTransform inventoryRect = parentAfterDrag.parent.GetComponent<RectTransform>();
+        return RectTransformUtility.RectangleContainsScreenPoint(inventoryRect, mousePosition);
+    }
+
+    void DropItem()
+    {
+        if (itemDropPrefab == null || item == null) return;
+
+        GameObject player = GameObject.FindGameObjectWithTag("Player");
+        if (player == null) return;
+
+        // Drop in front of player
+        Vector3 dropPosition = player.transform.position + player.transform.forward * 2f;
+        dropPosition.y += 1f; // Slightly above ground to avoid clipping
+
+        // Instantiate the item drop prefab
+        GameObject drop = Instantiate(itemDropPrefab, dropPosition, Quaternion.identity);
+
+        // Pass item data to the pickup
+        ItemPickup pickup = drop.GetComponent<ItemPickup>();
+        if (pickup != null)
+        {
+            pickup.Initialize(item, count);
+        }
+
+        count--;
+        if (count <= 0)
+            Destroy(gameObject);
+        else 
+            RefreshCount();
+    }
 }
