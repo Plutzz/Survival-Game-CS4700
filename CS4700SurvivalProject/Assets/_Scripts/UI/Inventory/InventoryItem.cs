@@ -82,7 +82,14 @@ public class InventoryItem : MonoBehaviour, IBeginDragHandler, IDragHandler, IEn
         }
         else
         {
-            DropItem();
+            bool removedFromInventory = DropItem();
+            if (!removedFromInventory && parentAfterDrag != null)
+            {
+                transform.SetParent(parentAfterDrag);
+                transform.localPosition = Vector3.zero;
+            }
+                
+            
             Debug.Log("Dropped outside inventory!");
         }
         
@@ -124,12 +131,12 @@ public class InventoryItem : MonoBehaviour, IBeginDragHandler, IDragHandler, IEn
         return RectTransformUtility.RectangleContainsScreenPoint(inventoryRect, mousePosition);
     }
 
-    void DropItem()
+    bool DropItem()
     {
-        if (itemDropPrefab == null || item == null) return;
+        if (itemDropPrefab == null || item == null) return false;
 
         GameObject player = GameObject.FindGameObjectWithTag("Player");
-        if (player == null) return;
+        if (player == null) return false;
 
         // Drop in front of player
         Vector3 dropPosition = player.transform.position + player.transform.forward * 2f;
@@ -142,13 +149,20 @@ public class InventoryItem : MonoBehaviour, IBeginDragHandler, IDragHandler, IEn
         ItemPickup pickup = drop.GetComponent<ItemPickup>();
         if (pickup != null)
         {
-            pickup.Initialize(item, count);
+            if (item.stackable && count > 1)
+            {
+                pickup.Initialize(item, 1);
+                count--;
+                RefreshCount();
+                return false;
+            }
+            else
+            {
+                pickup.Initialize(item, count);
+                Destroy(gameObject);
+                return true;
+            }
         }
-
-        count--;
-        if (count <= 0)
-            Destroy(gameObject);
-        else 
-            RefreshCount();
+        return false;
     }
 }
