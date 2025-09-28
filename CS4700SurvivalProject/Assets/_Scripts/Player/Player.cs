@@ -15,6 +15,10 @@ public class Player : StateMachineCore
     [SerializeField] public Transform pivot;
     [SerializeField] public PlayerStats stats;
     [SerializeField] private float speed;
+
+    [Header("Debug")]
+    [SerializeField] private bool bypassNetwork;
+    
     public NetworkVariable<Vector2> lookDir = new NetworkVariable<Vector2>(
         Vector2.zero, 
         NetworkVariableReadPermission.Everyone,
@@ -28,13 +32,13 @@ public class Player : StateMachineCore
         SetState(allStates["Idle"]);
         SetStateServerRpc("Idle", false);
         
-        if (!IsOwner) return;
+        if(!bypassNetwork && !IsOwner) return; 
     }
 
     // Update is called once per frame
     protected override void Update()
     {
-        if (!IsOwner) return;
+        if(!bypassNetwork && !IsOwner) return;
         
         HandleTransitions();
         
@@ -50,7 +54,7 @@ public class Player : StateMachineCore
 
     protected override void FixedUpdate()
     {
-        if (!IsOwner) return;
+        if(!bypassNetwork && !IsOwner) return;
         
         currentState.DoFixedUpdateBranch();
     }
@@ -79,5 +83,14 @@ public class Player : StateMachineCore
             SetStateServerRpc("Idle", false);
             return;
         }
+    }
+
+    private void ChangeState(string newState, bool forceReset)
+    {
+        SetState(allStates[newState], forceReset);
+        
+        if(!bypassNetwork && !IsOwner) return;
+        
+        SetStateServerRpc(newState, forceReset);
     }
 }

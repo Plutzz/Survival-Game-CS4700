@@ -1227,6 +1227,7 @@ MonoBehaviour:
   pivot: {fileID: 778139819470315009}
   stats: {fileID: 11400000, guid: 52eb7b3d43cd31645913906e865addb5, type: 2}
   speed: 5
+  bypassNetwork: 0
   lookDir:
     m_InternalValue: {x: 0, y: 0}
 --- !u!114 &128020155583788951
