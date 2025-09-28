@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.Netcode;
 using UnityEngine;
 using UnityEngine.Serialization;
 
@@ -14,10 +15,10 @@ public class PlayerAttack : State
     {
         weaponHitbox.gameObject.SetActive(true);
         weaponHitbox.ClearHasBeenDamaged();
-        if (Mathf.Abs(player.lookDir.x) > Mathf.Abs(player.lookDir.y))
+        if (Mathf.Abs(player.lookDir.Value.x) > Mathf.Abs(player.lookDir.Value.y))
         {
 
-            if (player.lookDir.x > 0)
+            if (player.lookDir.Value.x > 0)
             {
                 weaponHitbox.transform.localPosition = new Vector3(-Mathf.Abs(weaponHitbox.transform.localPosition.x),
                     weaponHitbox.transform.localPosition.y, weaponHitbox.transform.localPosition.z);
@@ -34,7 +35,7 @@ public class PlayerAttack : State
         }
         else
         {
-            if (player.lookDir.y > 0)
+            if (player.lookDir.Value.y > 0)
             {
                 weaponHitbox.transform.localPosition = new Vector3(Mathf.Abs(weaponHitbox.transform.localPosition.x),
                     weaponHitbox.transform.localPosition.y, weaponHitbox.transform.localPosition.z);

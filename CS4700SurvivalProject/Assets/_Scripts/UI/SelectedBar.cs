@@ -19,6 +19,19 @@ public class SelectedBar : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        MainMenuManager.Instance.optionIndex = 0;
+        Debug.Log(options[MainMenuManager.Instance.optionIndex].transform.position.y);
+        transform.position = new Vector3(transform.position.x,
+            options[MainMenuManager.Instance.optionIndex].transform.position.y, transform.position.z);
+        SetColor();
+    }
+    
+    private void OnEnable()
+    {
+        MainMenuManager.Instance.optionIndex = 0;
+        Debug.Log(options[MainMenuManager.Instance.optionIndex].transform.position.y);
+        transform.position = new Vector3(transform.position.x,
+            options[MainMenuManager.Instance.optionIndex].transform.position.y, transform.position.z);
         SetColor();
     }
 
@@ -51,7 +64,7 @@ public class SelectedBar : MonoBehaviour
         SetColor();
         RectTransform rect = transform as RectTransform;
         rect.DOMoveY(options[MainMenuManager.Instance.optionIndex].transform.position.y, time, true).SetEase(ease);
-        
+        Debug.Log(options[MainMenuManager.Instance.optionIndex].transform.position.y);
         options[MainMenuManager.Instance.optionIndex].GetComponentInChildren<MMF_Player>()?.PlayFeedbacks();
         
     }
@@ -75,13 +88,5 @@ public class SelectedBar : MonoBehaviour
         options[MainMenuManager.Instance.optionIndex].color = selectedColor;
     }
 
-    private void OnEnable()
-    {
-        MainMenuManager.Instance.optionIndex = 0;
-        ResetOptionFeedbacks();
-        RectTransform rect = transform as RectTransform;
-        rect.position = new Vector3(transform.position.x,
-            options[MainMenuManager.Instance.optionIndex].transform.position.y, transform.position.z);
-        SetColor();
-    }
+
 }

@@ -1,11 +1,12 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.Netcode;
 using UnityEngine;
 
 /// <summary>
 /// Base class that all state scriptable objects inherit from.
 /// </summary>
-public class State : MonoBehaviour
+public class State : NetworkBehaviour
 {
     protected StateMachineCore core;
 

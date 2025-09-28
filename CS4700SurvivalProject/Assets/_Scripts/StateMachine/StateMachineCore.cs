@@ -1,12 +1,18 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
+using AYellowpaper.SerializedCollections;
+using Unity.Netcode;
 using UnityEngine;
 
-public abstract class StateMachineCore : MonoBehaviour
+/// <summary>
+/// This is the core class for state machines (where all the states are initialized and logic is called)
+/// In Start: make sure to call SetupInstances() and set the initial state of the state machine
+/// In Update: make sure to call base.Update() or currentState.DoUpdateBranch();
+/// In FixedUpdate: make sure to call base.FixedUpdate() or currentState.DoFixedUpdateBranch();
+/// </summary>
+public abstract class StateMachineCore : NetworkBehaviour
 {
-    /// <summary>
-    /// Dictonary used to hold states that are NOT a part of a heirarchical state machine.
-    /// </summary>
     [Header("StateMachineCore Variables")]
     public Rigidbody2D rb;
     /// <summary>
@@ -14,68 +20,63 @@ public abstract class StateMachineCore : MonoBehaviour
     /// </summary>
     public GameObject statesParent;
     public Animator animator;
-    public StateMachine stateMachine { get; private set; }
+    public State currentState { get; private set; }
+    public State previousState { get; private set; }
+
+    [SerializeField] public SerializedDictionary<string, State> allStates;
+    // This event is called when a state is changed and passes the previous state (from state) and new state (to state)
+    public event EventHandler<OnStateChangedEventArgs> OnStateChanged;
+
+    public class OnStateChangedEventArgs : EventArgs
+    {
+        public State previousState;
+        public State nextState;
+    }
+    
     /// <summary>
     /// Passes the core to all the states in the states dictionary
     /// </summary>
-    /// 
-    private void Start()
-    {
-        // Template for classes that inherit from this class
-        // put the following code inside of your Start() function
-
-        //SetupInstances()
-        //stateMachine.SetState(patrolState);
-    }
     public void SetupInstances()
     {
-        stateMachine = new StateMachine();
-
-        State[] _allChildStates;
+        
+        State[] allChildStates;
 
         if (statesParent == null)
         {
-            _allChildStates = GetComponentsInChildren<State>();
+            allChildStates = GetComponentsInChildren<State>();
         }
         else
         {
-            _allChildStates = statesParent.GetComponentsInChildren<State>();
+            allChildStates = statesParent.GetComponentsInChildren<State>();
         }
 
-        foreach (State _state in _allChildStates)
+        foreach (State state in allChildStates)
         {
-            _state.SetCore(this);
-            _state.gameObject.SetActive(false);
+            state.SetCore(this);
+            state.gameObject.SetActive(false);
         }
     }
 
-    private void Update()
+    protected virtual void Update()
     {
-        // Template for classes that inherit from this class
-        // put the following code inside of your Update() function
-
-        //if(stateMachine.currentState.isComplete)
-        //{
-            //Default state transition if the state completes itself
-        //}
-        //stateMachine.currentState.DoUpdateBranch();
+        currentState.DoUpdateBranch();
     }
 
-    private void FixedUpdate()
-    {
-        stateMachine.currentState.DoFixedUpdateBranch();
+    protected virtual void FixedUpdate()
+    { 
+        currentState.DoFixedUpdateBranch();
     }
 
     public virtual void OnDrawGizmos()
     {
         #if UNITY_EDITOR
-        if (Application.isPlaying && stateMachine != null)
+        if (Application.isPlaying)
         {
-            List<State> states = stateMachine.GetActiveStateBranch();
+            List<State> states = GetActiveStateBranch();
     
             GUIStyle style = new GUIStyle();
             style.alignment = TextAnchor.MiddleCenter;
-            if(stateMachine.currentState.isComplete)
+            if(currentState.isComplete)
             {
                 style.normal.textColor = Color.green;
             }
@@ -89,6 +90,56 @@ public abstract class StateMachineCore : MonoBehaviour
         }
         #endif
     }
+
+    /// <summary>
+    /// Sets the state machine with a specified state
+    /// </summary>
+    /// <param name="newState"></param>
+    /// <param name="forceReset"</param>
+    public void SetState(State newState, bool forceReset = false)
+    {
+        if (currentState != newState || forceReset)
+        {
+            //Debug.Log("Changing State to " + _newState);
+            currentState?.DoExitState();
+            currentState?.gameObject.SetActive(false);
+            previousState = currentState;
+            currentState = newState;
+            currentState.gameObject.SetActive(true);
+            currentState.DoEnterState();
+            OnStateChanged?.Invoke(this,
+                new OnStateChangedEventArgs { previousState = previousState, nextState = currentState });
+        }
+
+    }
+
+    [ClientRpc]
+    public void SetStateClientRpc(string stateName, bool forceReset)
+    {
+        Debug.Log($"Client {OwnerClientId} state changed to {allStates[stateName]}");
+        SetState(allStates[stateName], forceReset);
+    }
+    [ServerRpc] 
+    public void SetStateServerRpc(string stateName, bool forceReset)
+    {
+        SetStateClientRpc(stateName, forceReset);
+    }
+    public List<State> GetActiveStateBranch(List<State> list = null)
+    {
+        if (list == null)
+            list = new List<State>();
+
+        if (currentState == null)
+            return list;
+
+        else
+        {
+            list.Add(currentState);
+            return currentState.stateMachine.GetActiveStateBranch(list);
+        }
+
+    }
+
 
 
    

@@ -1,10 +1,11 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Unity.Netcode;
 using UnityEngine;
 using UnityEngine.Serialization;
 
-public class ItemHold : MonoBehaviour
+public class ItemHold : NetworkBehaviour
 {
     [SerializeField] private ItemHoldPosition up, down, left, right;
     [SerializeField] private Player player;
@@ -13,13 +14,13 @@ public class ItemHold : MonoBehaviour
     private ItemHoldPosition currentPosition;
     private void Update()
     {
-        if (player.stateMachine.currentState is PlayerAttack) return;
+        if (IsOwner && player.currentState is PlayerAttack) return;
         
         
-        if (Mathf.Abs(player.lookDir.x) > Mathf.Abs(player.lookDir.y))
+        if (Mathf.Abs(player.lookDir.Value.x) > Mathf.Abs(player.lookDir.Value.y))
         {
 
-            if (player.lookDir.x > 0)
+            if (player.lookDir.Value.x > 0)
                 SetItemPosition(right);
             else
                 SetItemPosition(left);
@@ -27,13 +28,12 @@ public class ItemHold : MonoBehaviour
         }
         else
         {
-            if (player.lookDir.y > 0)
+            if (player.lookDir.Value.y > 0)
                 SetItemPosition(up);
             else
                 SetItemPosition(down);
         }
     }
-
     private void SetItemPosition(ItemHoldPosition position)
     {
         transform.localPosition = position.localPosition;

@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System;
+using Unity.Netcode;
 using UnityEngine;
 
 /// <summary>
@@ -8,9 +9,9 @@ using UnityEngine;
 /// </summary>
 public class StateMachine
 {
-    public State currentState  { get; private set; } 
+    public State currentState { get; private set; }
     public State previousState { get; private set; }
-    
+
     // This event is called when a state is changed and passes the previous state (from state) and new state (to state)
     public event EventHandler<OnStateChangedEventArgs> OnStateChanged;
 
@@ -19,17 +20,17 @@ public class StateMachine
         public State previousState;
         public State nextState;
     }
-    
+
 
     /// <summary>
     /// Sets the state machine with a specified state
     /// </summary>
     /// <param name="_newState"></param>
     /// <param name="_forceReset"</param>
+    [ServerRpc]
     public void SetState(State _newState, bool _forceReset = false)
     {
-        
-        if(currentState != _newState || _forceReset)
+        if (currentState != _newState || _forceReset)
         {
             //Debug.Log("Changing State to " + _newState);
             currentState?.DoExitState();
@@ -38,13 +39,26 @@ public class StateMachine
             currentState = _newState;
             currentState.gameObject.SetActive(true);
             currentState.DoEnterState();
-            OnStateChanged?.Invoke(this, new OnStateChangedEventArgs { previousState = previousState, nextState = currentState });
+            OnStateChanged?.Invoke(this,
+                new OnStateChangedEventArgs { previousState = previousState, nextState = currentState });
         }
 
     }
 
+    [ClientRpc]
+    public void SetStateClientRPC(State _newState, bool _forceReset = false)
+    {
+        SetState(_newState, _forceReset);
+    }
+    [ServerRpc]
+    public void SetStateServerRPC(State _newState, bool _forceReset = false)
+    {
+        SetState(_newState, _forceReset);
+    }
+    
 
-    public List<State> GetActiveStateBranch(List<State> _list = null)
+
+public List<State> GetActiveStateBranch(List<State> _list = null)
     {
         if (_list == null)
             _list = new List<State>();

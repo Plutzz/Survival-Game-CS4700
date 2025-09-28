@@ -9,60 +9,74 @@ public class Player : StateMachineCore
 {
     [field: HorizontalLine(color: EColor.Gray)]
     [field: Header("States")]
-    [field: SerializeField] public PlayerIdle idle { get; private set; }
-    [field: SerializeField] public PlayerMove move { get; private set; }
-    [field: SerializeField] public PlayerAttack attack { get; private set; }
 
     [Header("Components")] 
     [SerializeField] public PlayerInput playerInput;
     [SerializeField] public Transform pivot;
     [SerializeField] public PlayerStats stats;
     [SerializeField] private float speed;
-    
-    public Vector2 lookDir;
+    public NetworkVariable<Vector2> lookDir = new NetworkVariable<Vector2>(
+        Vector2.zero, 
+        NetworkVariableReadPermission.Everyone,
+        NetworkVariableWritePermission.Owner
+    );
     
     // Start is called before the first frame update
     void Start()
     {
         SetupInstances();
-        stateMachine.SetState(idle);
+        SetState(allStates["Idle"]);
+        SetStateServerRpc("Idle", false);
+        
+        if (!IsOwner) return;
     }
 
     // Update is called once per frame
-    void Update()
+    protected override void Update()
     {
+        if (!IsOwner) return;
+        
         HandleTransitions();
-        if (!PauseMenuManager.Instance.isGamePaused)
+        
+        if (PauseMenuManager.Instance != null && !PauseMenuManager.Instance.isGamePaused)
         {
-            lookDir = (Camera.main.ScreenToWorldPoint(Input.mousePosition) - transform.position).normalized;
+            lookDir.Value = (Camera.main.ScreenToWorldPoint(Input.mousePosition) - transform.position).normalized;
         }
-        stateMachine.currentState.DoUpdateBranch();
+        
+        CameraManager.Instance?.SetPlayerFollow(transform);
+        
+        currentState.DoUpdateBranch();
     }
 
-    void FixedUpdate()
+    protected override void FixedUpdate()
     {
-        stateMachine.currentState.DoFixedUpdateBranch();
+        if (!IsOwner) return;
+        
+        currentState.DoFixedUpdateBranch();
     }
 
     private void HandleTransitions()
     {
         
-        if ((stateMachine.currentState == move || stateMachine.currentState == idle) &&
+        if ((currentState == allStates["Move"] || currentState == allStates["Idle"]) &&
             playerInput.attackPressedDownThisFrame)
         {
-            stateMachine.SetState(attack);
+            SetState(allStates["Attack"]);
+            SetStateServerRpc("Attack", false);
             return;
         }
         
-        if ((stateMachine.currentState == idle || stateMachine.currentState.isComplete) && playerInput.moveVector != Vector2.zero)
+        if ((currentState == allStates["Idle"] || currentState.isComplete) && playerInput.moveVector != Vector2.zero)
         {
-            stateMachine.SetState(move);
+            SetState(allStates["Move"]);
+            SetStateServerRpc("Move", false);
             return;
         }
-
-        if ((stateMachine.currentState == move || stateMachine.currentState.isComplete) && playerInput.moveVector == Vector2.zero)
+        
+        if ((currentState == allStates["Move"] || currentState.isComplete) && playerInput.moveVector == Vector2.zero)
         {
-            stateMachine.SetState(idle);
+            SetState(allStates["Idle"]);
+            SetStateServerRpc("Idle", false);
             return;
         }
     }

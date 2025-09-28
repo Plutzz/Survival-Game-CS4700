@@ -1,9 +1,10 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Unity.Netcode;
 using UnityEngine;
 
-public class DamageBox : MonoBehaviour
+public class DamageBox : NetworkBehaviour
 {
     [SerializeField] private int damage;
     private List<IDamageable> hasBeenDamaged = new List<IDamageable>();
