@@ -5,7 +5,9 @@ using UnityEngine;
 
 public class InventoryCursorAnimation : MonoBehaviour
 {
-    [SerializeField] private RectTransform rectTransform;
+    [SerializeField] private RectTransform menuParent;
+    [SerializeField] private RectTransform cursorLogic, cursorGraphics;
+    
     
     [Header("Breathing Animation")] 
     [SerializeField] private float time;
@@ -13,23 +15,28 @@ public class InventoryCursorAnimation : MonoBehaviour
     [SerializeField] private Ease ease;
     
     [Header("Moving Animation")]
-    [SerializeField] private float moveTime;
-    [SerializeField] private Ease moveEase;
+    [SerializeField] private float moveSpeed;
     // Start is called before the first frame update
     void Start()
     {
         DoBreatheAnimation();
     }
+    
+    void Update()
+    {
+        cursorGraphics.position = Vector3.Lerp(cursorGraphics.position, cursorLogic.position, moveSpeed * Time.deltaTime * 100f);
+    }
 
     private void DoBreatheAnimation()
     {
-        rectTransform.sizeDelta = startSize;
-        rectTransform.DOSizeDelta(endSize, time).SetEase(ease).SetLoops(-1, LoopType.Yoyo);
+        cursorGraphics.sizeDelta = startSize;
+        cursorGraphics.DOSizeDelta(endSize, time).SetEase(ease).SetLoops(-1, LoopType.Yoyo);
     }
 
-    public void MoveToPosition(Vector2 position)
+    public void MoveToPosition(Transform inventorySlot, float delay = 0)
     {
-        transform.position = position;
-        // transform.DOMove(position, moveTime).SetEase(moveEase);
+        cursorLogic.parent = inventorySlot.transform;
+        cursorLogic.localPosition = Vector3.zero;
+        
     }
 }

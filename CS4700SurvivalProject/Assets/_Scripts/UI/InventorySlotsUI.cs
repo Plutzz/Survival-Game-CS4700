@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using DG.Tweening;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -9,6 +10,8 @@ public class InventorySlotsUI : MonoBehaviour
     [SerializeField] private Transform inventorySlotsParent;
     [SerializeField] private InventoryCursorAnimation cursor;
     [SerializeField] private ScrollRect scrollRect;
+    [SerializeField] private float scrollTime;
+    [SerializeField] private Ease scrollEase;
     private int currentInventorySlot = 0;
     // Start is called before the first frame update
     void Start()
@@ -42,7 +45,7 @@ public class InventorySlotsUI : MonoBehaviour
         }
         
         
-        if (input.x > 0 && currentInventorySlot < inventorySlots.Length)
+        if (input.x > 0 && currentInventorySlot < inventorySlots.Length - 1)
         {
             currentInventorySlot++;
             MoveToInventorySlot(inventorySlots[currentInventorySlot]);
@@ -70,7 +73,10 @@ public class InventorySlotsUI : MonoBehaviour
 
     private void MoveToInventorySlot(Transform inventorySlot)
     {
-        scrollRect.verticalNormalizedPosition = ((inventorySlots.Length - currentInventorySlot + 1) / 3) / (float)(inventorySlots.Length / 3);
-        cursor.MoveToPosition(inventorySlot.position);
+        DOTween.Kill(transform);
+        scrollRect.DOVerticalNormalizedPos(
+            ((float)(inventorySlots.Length - currentInventorySlot + 1) / 3) / (float)(inventorySlots.Length / 3),
+            scrollTime);
+        cursor.MoveToPosition(inventorySlot);
     }
 }
