@@ -19,7 +19,7 @@ public class InventoryCursorAnimation : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        DoBreatheAnimation();
+        DoBreatheAnimation(); 
     }
     
     void Update()
@@ -35,8 +35,13 @@ public class InventoryCursorAnimation : MonoBehaviour
 
     public void MoveToPosition(Transform inventorySlot, float delay = 0)
     {
-        cursorLogic.parent = inventorySlot.transform;
-        cursorLogic.localPosition = Vector3.zero;
+        // cursorLogic.parent = inventorySlot.transform;
+        // cursorLogic.localPosition = Vector3.zero;
+
+        cursorLogic.SetParent(inventorySlot, false); // keep local anchors & zero out transforms
+        cursorLogic.anchoredPosition = Vector2.zero;
+        cursorLogic.localRotation = Quaternion.identity;
+        cursorLogic.localScale = Vector3.one;
         
     }
 }

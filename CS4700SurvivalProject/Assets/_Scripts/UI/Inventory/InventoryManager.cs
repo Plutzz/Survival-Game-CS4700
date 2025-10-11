@@ -8,6 +8,9 @@ public class InventoryManager : SingletonPersistent<InventoryManager>
     public int maxStackedItems = 4;
     public InventorySlot[] inventorySlots;
     public GameObject InventoryItemPrefab;
+    [SerializeField] private InventoryCursorAnimation cursor;
+    [SerializeField] private Transform inventorySlotsParent;
+    [SerializeField] private Transform[] inventorySlotsTransform;
 
     int selectedSlot = -1;
 
@@ -45,12 +48,8 @@ public class InventoryManager : SingletonPersistent<InventoryManager>
 
     void ChangeSelectedSlot(int newValue)
     {
-        if (selectedSlot >= 0)
-        {
-            inventorySlots[selectedSlot].Deselect();
-        }
-
-        inventorySlots[newValue].Select();
+        Debug.Log("Change to slot " + newValue);   
+        cursor.MoveToPosition(inventorySlotsTransform[newValue]);
         selectedSlot = newValue;
     }
 

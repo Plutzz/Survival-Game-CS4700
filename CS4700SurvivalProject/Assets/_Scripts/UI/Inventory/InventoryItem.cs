@@ -15,8 +15,9 @@ public class InventoryItem : MonoBehaviour, IBeginDragHandler, IDragHandler, IEn
     public Text countText;
     public GameObject itemDropPrefab;
     [HideInInspector] public Item item;
-    [HideInInspector] public int count = 1;
+    [HideInInspector] public int count = 1; 
     [HideInInspector] public Transform parentAfterDrag;
+    
     
     // Local guard so OnDrag/OnEndDrag only act when a drag was allowed to start.
     bool draggingAllowed = false;
@@ -73,26 +74,17 @@ public class InventoryItem : MonoBehaviour, IBeginDragHandler, IDragHandler, IEn
     public void OnEndDrag(PointerEventData eventData)
     {
         if (!draggingAllowed) return;
-        // Restore to original parent and re-enable raycasts. Be defensive in case parentAfterDrag was lost.
+            bool removedFromInventory = false;
 
-        if (IsWithinInventory(eventData.position))
+        if (!IsWithinInventory(eventData.position))
+            removedFromInventory = DropItem();
+
+        if (!removedFromInventory && parentAfterDrag != null)
         {
-            if (parentAfterDrag != null)
-                transform.SetParent(parentAfterDrag);
+            transform.SetParent(parentAfterDrag);
+            transform.localPosition = Vector3.zero; // snap back
         }
-        else
-        {
-            bool removedFromInventory = DropItem();
-            if (!removedFromInventory && parentAfterDrag != null)
-            {
-                transform.SetParent(parentAfterDrag);
-                transform.localPosition = Vector3.zero;
-            }
-                
-            
-            Debug.Log("Dropped outside inventory!");
-        }
-        
+    
         if (image != null)
             image.raycastTarget = true;
         Debug.Log("end drag");
