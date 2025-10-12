@@ -3,8 +3,14 @@ using UnityEngine.EventSystems;
 
 public class InventorySlot : MonoBehaviour, IDropHandler
 {
+    public bool isResultSlot = false;
     public void OnDrop(PointerEventData eventData)
     {
+        if (isResultSlot) 
+        {
+            Debug.Log("Cannot drop items on a result slot.");
+            return; // ignore any drops
+        }
         if (!OpenInventory.InventoryOpen)
             return;
 

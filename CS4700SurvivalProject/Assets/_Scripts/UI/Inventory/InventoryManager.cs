@@ -48,7 +48,7 @@ public class InventoryManager : SingletonPersistent<InventoryManager>
 
     void ChangeSelectedSlot(int newValue)
     {
-        Debug.Log("Change to slot " + newValue);   
+        // Debug.Log("Change to slot " + newValue);   
         cursor.MoveToPosition(inventorySlotsTransform[newValue]);
         selectedSlot = newValue;
     }

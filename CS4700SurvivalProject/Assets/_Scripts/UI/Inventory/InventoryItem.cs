@@ -15,8 +15,9 @@ public class InventoryItem : MonoBehaviour, IBeginDragHandler, IDragHandler, IEn
     public Text countText;
     public GameObject itemDropPrefab;
     [HideInInspector] public Item item;
-    [HideInInspector] public int count = 1; 
+    [HideInInspector] public int count = 1;
     [HideInInspector] public Transform parentAfterDrag;
+    public ResultSlot parentResultSlot;
     
     
     // Local guard so OnDrag/OnEndDrag only act when a drag was allowed to start.
@@ -61,6 +62,15 @@ public class InventoryItem : MonoBehaviour, IBeginDragHandler, IDragHandler, IEn
         if (image != null)
             image.raycastTarget = false;
         Debug.Log("begin drag");
+        if (parentResultSlot != null)
+{
+        InventoryItem claimedItem;
+        if (parentResultSlot.ClaimResult(out claimedItem))
+        {
+            parentAfterDrag = claimedItem.transform.parent; // set parent for snapping back
+            // continue drag with the item
+        }
+    }
     }
 
     public void OnDrag(PointerEventData eventData)
@@ -119,9 +129,13 @@ public class InventoryItem : MonoBehaviour, IBeginDragHandler, IDragHandler, IEn
 
     bool IsWithinInventory(Vector2 mousePosition)
     {
-        RectTransform inventoryRect = parentAfterDrag.parent.GetComponent<RectTransform>();
-        return RectTransformUtility.RectangleContainsScreenPoint(inventoryRect, mousePosition);
+        if (parentAfterDrag == null) return false;
+        RectTransform parentRect = parentAfterDrag.GetComponent<RectTransform>();
+        if (parentRect == null) return false;
+        
+        return RectTransformUtility.RectangleContainsScreenPoint(parentRect, mousePosition);
     }
+
 
     bool DropItem()
     {

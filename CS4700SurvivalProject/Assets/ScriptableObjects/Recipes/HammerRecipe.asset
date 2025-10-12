@@ -1,0 +1,24 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 608033ff7d2a8ee4c926230b94c9452f, type: 3}
+  m_Name: HammerRecipe
+  m_EditorClassIdentifier: 
+  requiredPattern:
+  - {fileID: 11400000, guid: 7b2cc0c6931f95545a1d9cd4fc670a95, type: 2}
+  - {fileID: 11400000, guid: 30ff8240d88552c42b88c61c7c7a3a7d, type: 2}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  resultItem: {fileID: 11400000, guid: 4259aa5128510e74694a97a23c095d0b, type: 2}
