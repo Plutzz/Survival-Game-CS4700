@@ -8,33 +8,32 @@ using UnityEngine;
 /// </summary>
 public class State : NetworkBehaviour
 {
-    protected StateMachineCore core;
+    protected StateMachineCore Core;
 
-    protected Rigidbody2D rb => core.rb;
-    protected Animator animator => core.animator;
-    public bool isComplete { get; protected set; }
+    protected Rigidbody2D Rb => Core.rb;
+    protected Animator Animator => Core.animator;
+    public bool IsComplete { get; protected set; }
 
-    protected float stateUptime = 0;
+    protected float StateUptime = 0;
 
-    public StateMachine stateMachine;
+    public StateMachine StateMachine;
 
-    public StateMachine parent;
-    public State currentState => stateMachine.currentState;
-    public void SetState(State _newState, bool _forceReset = false)
+    public StateMachine Parent;
+    public State CurrentState => StateMachine.currentState;
+    public void SetState(State newState, bool forceReset = false)
     {
-        stateMachine.SetState(_newState, _forceReset);
+        StateMachine.SetState(newState, forceReset);
     }
 
     /// <summary>
     /// Passes the StateMachineCore to this state.
     /// Can be overriden to initialize additional parameters
     /// </summary>
-    /// <param name="_core"></param>
-    /// <param name="_parent"</param>
-    public virtual void SetCore(StateMachineCore _core)
+    /// <param name="core"></param>
+    public virtual void SetCore(StateMachineCore core)
     {
-        stateMachine = new StateMachine();
-        core = _core;
+        StateMachine = new StateMachine();
+        Core = core;
     }
     /// <summary>
     /// Setup state, e.g. starting animations.
@@ -45,7 +44,7 @@ public class State : NetworkBehaviour
     /// <summary>
     /// State-Cleanup.
     /// </summary>
-    public virtual void DoExitState() { currentState?.DoExitState(); ResetValues(); }
+    public virtual void DoExitState() { CurrentState?.DoExitState(); ResetValues(); }
 
     /// <summary>
     /// This method is called once every frame while this state is active.
@@ -64,7 +63,7 @@ public class State : NetworkBehaviour
     /// This method is called during ExitLogic().
     /// Use this method to reset or null out values during state cleanup.
     /// </summary>
-    public virtual void ResetValues() { stateUptime = 0f; isComplete = false; }
+    public virtual void ResetValues() { StateUptime = 0f; IsComplete = false; }
 
     /// <summary>
     /// This method contains checks for all transitions from the current state.
@@ -75,7 +74,7 @@ public class State : NetworkBehaviour
 
     protected void HandleTimer()
     {
-        stateUptime += Time.deltaTime;
+        StateUptime += Time.deltaTime;
     }
 
     /// <summary>
@@ -83,7 +82,7 @@ public class State : NetworkBehaviour
     /// </summary>
     public void DoUpdateBranch()
     {
-        currentState?.DoUpdateBranch();
+        CurrentState?.DoUpdateBranch();
         DoUpdateState();
     }
 
@@ -92,7 +91,7 @@ public class State : NetworkBehaviour
     /// </summary>
     public void DoFixedUpdateBranch()
     {
-        currentState?.DoFixedUpdateBranch();
+        CurrentState?.DoFixedUpdateBranch();
         DoFixedUpdateState();
     }
 

@@ -9,7 +9,7 @@ public class PlayerIdle : State
 
     public override void DoEnterState()
     {
-        rb.velocity = new Vector2(0, 0);
+        Rb.velocity = new Vector2(0, 0);
         base.DoEnterState();
     }
     public override void DoUpdateState()
@@ -17,16 +17,16 @@ public class PlayerIdle : State
         if (Mathf.Abs(player.lookDir.Value.x) > Mathf.Abs(player.lookDir.Value.y))
         {
             if (player.lookDir.Value.x > 0)
-                animator.Play(right.name);
+                Animator.Play(right.name);
             else
-                animator.Play(left.name);
+                Animator.Play(left.name);
         }
         else
         {
             if (player.lookDir.Value.y > 0)
-                animator.Play(up.name);
+                Animator.Play(up.name);
             else
-                animator.Play(down.name);
+                Animator.Play(down.name);
         }
         base.DoUpdateState();
     }

@@ -3,14 +3,14 @@ using System.Collections.Generic;
 using Unity.Netcode;
 using UnityEngine;
 
-public class Enemy : NetworkBehaviour, IDamageable
+public class Enemy : StateMachineCore, IDamageable
 {
     [SerializeField] protected NetworkVariable<int> health = new NetworkVariable<int>(100);
-
-
+    
     protected void Update()
     {
         if (!IsServer) return;
+        DoAI();
     }
 
     /// <summary>

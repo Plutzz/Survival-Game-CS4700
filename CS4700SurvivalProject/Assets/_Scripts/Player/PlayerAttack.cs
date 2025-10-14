@@ -22,14 +22,14 @@ public class PlayerAttack : State
             {
                 weaponHitbox.transform.localPosition = new Vector3(-Mathf.Abs(weaponHitbox.transform.localPosition.x),
                     weaponHitbox.transform.localPosition.y, weaponHitbox.transform.localPosition.z);
-                animator.Play(right.name);
+                Animator.Play(right.name);
             }
 
             else
             {
                 weaponHitbox.transform.localPosition = new Vector3(Mathf.Abs(weaponHitbox.transform.localPosition.x),
                     weaponHitbox.transform.localPosition.y, weaponHitbox.transform.localPosition.z);
-                animator.Play(left.name);
+                Animator.Play(left.name);
             }
                 
         }
@@ -39,14 +39,14 @@ public class PlayerAttack : State
             {
                 weaponHitbox.transform.localPosition = new Vector3(Mathf.Abs(weaponHitbox.transform.localPosition.x),
                     weaponHitbox.transform.localPosition.y, weaponHitbox.transform.localPosition.z);
-                animator.Play(up.name);
+                Animator.Play(up.name);
             }
 
             else
             {
                 weaponHitbox.transform.localPosition = new Vector3(-Mathf.Abs(weaponHitbox.transform.localPosition.x),
                     weaponHitbox.transform.localPosition.y, weaponHitbox.transform.localPosition.z);
-                animator.Play(down.name);
+                Animator.Play(down.name);
             }
                 
         }
@@ -61,11 +61,11 @@ public class PlayerAttack : State
     public override void DoUpdateState()
     {
         Vector2 moveInput = player.playerInput.moveVector.normalized;
-        rb.velocity = moveInput * player.stats.moveSpeed;
+        Rb.velocity = moveInput * player.stats.moveSpeed;
         
-        if (stateUptime > attackTime)
+        if (StateUptime > attackTime)
         {
-            isComplete = true;
+            IsComplete = true;
         }
         
         base.DoUpdateState();

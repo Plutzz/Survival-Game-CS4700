@@ -20,8 +20,8 @@ public abstract class StateMachineCore : NetworkBehaviour
     /// </summary>
     public GameObject statesParent;
     public Animator animator;
-    public State currentState { get; private set; }
-    public State previousState { get; private set; }
+    public State CurrentState { get; private set; }
+    public State PreviousState { get; private set; }
 
     [SerializeField] public SerializedDictionary<string, State> allStates;
     // This event is called when a state is changed and passes the previous state (from state) and new state (to state)
@@ -29,8 +29,8 @@ public abstract class StateMachineCore : NetworkBehaviour
 
     public class OnStateChangedEventArgs : EventArgs
     {
-        public State previousState;
-        public State nextState;
+        public State PreviousState;
+        public State NextState;
     }
     
     /// <summary>
@@ -59,12 +59,12 @@ public abstract class StateMachineCore : NetworkBehaviour
 
     protected virtual void Update()
     {
-        currentState.DoUpdateBranch();
+        CurrentState.DoUpdateBranch();
     }
 
     protected virtual void FixedUpdate()
     { 
-        currentState.DoFixedUpdateBranch();
+        CurrentState.DoFixedUpdateBranch();
     }
 
     public virtual void OnDrawGizmos()
@@ -76,7 +76,7 @@ public abstract class StateMachineCore : NetworkBehaviour
     
             GUIStyle style = new GUIStyle();
             style.alignment = TextAnchor.MiddleCenter;
-            if(currentState.isComplete)
+            if(CurrentState.IsComplete)
             {
                 style.normal.textColor = Color.green;
             }
@@ -98,17 +98,17 @@ public abstract class StateMachineCore : NetworkBehaviour
     /// <param name="forceReset"</param>
     public void SetState(State newState, bool forceReset = false)
     {
-        if (currentState != newState || forceReset)
+        if (CurrentState != newState || forceReset)
         {
             //Debug.Log("Changing State to " + _newState);
-            currentState?.DoExitState();
-            currentState?.gameObject.SetActive(false);
-            previousState = currentState;
-            currentState = newState;
-            currentState.gameObject.SetActive(true);
-            currentState.DoEnterState();
+            CurrentState?.DoExitState();
+            CurrentState?.gameObject.SetActive(false);
+            PreviousState = CurrentState;
+            CurrentState = newState;
+            CurrentState.gameObject.SetActive(true);
+            CurrentState.DoEnterState();
             OnStateChanged?.Invoke(this,
-                new OnStateChangedEventArgs { previousState = previousState, nextState = currentState });
+                new OnStateChangedEventArgs { PreviousState = PreviousState, NextState = CurrentState });
         }
 
     }
@@ -119,23 +119,26 @@ public abstract class StateMachineCore : NetworkBehaviour
         Debug.Log($"Client {OwnerClientId} state changed to {allStates[stateName]}");
         SetState(allStates[stateName], forceReset);
     }
+    
     [ServerRpc(RequireOwnership = false)] 
     public void SetStateServerRpc(string stateName, bool forceReset)
     {
         SetStateClientRpc(stateName, forceReset);
     }
+    
+    
     public List<State> GetActiveStateBranch(List<State> list = null)
     {
         if (list == null)
             list = new List<State>();
 
-        if (currentState == null)
+        if (CurrentState == null)
             return list;
 
         else
         {
-            list.Add(currentState);
-            return currentState.stateMachine.GetActiveStateBranch(list);
+            list.Add(CurrentState);
+            return CurrentState.StateMachine.GetActiveStateBranch(list);
         }
 
     }

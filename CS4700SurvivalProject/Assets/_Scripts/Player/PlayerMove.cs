@@ -16,7 +16,7 @@ public class PlayerMove : State
     public override void DoUpdateState()
     {
         Vector2 moveInput = input.moveVector.normalized;
-        rb.velocity = moveInput * stats.moveSpeed;
+        Rb.velocity = moveInput * stats.moveSpeed;
         
         // Item Bob
         float step = 1f / 16f; // 0.0625
@@ -28,16 +28,16 @@ public class PlayerMove : State
         {
             
             if (player.lookDir.Value.x > 0)
-                animator.Play(right.name);
+                Animator.Play(right.name);
             else
-                animator.Play(left.name);
+                Animator.Play(left.name);
         }
         else
         {
             if (player.lookDir.Value.y > 0)
-                animator.Play(up.name);
+                Animator.Play(up.name);
             else
-                animator.Play(down.name);
+                Animator.Play(down.name);
         }
         base.DoUpdateState();
     }

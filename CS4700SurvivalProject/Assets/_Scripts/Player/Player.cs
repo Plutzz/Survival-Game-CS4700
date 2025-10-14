@@ -49,20 +49,20 @@ public class Player : StateMachineCore
         
         CameraManager.Instance?.SetPlayerFollow(transform);
         
-        currentState.DoUpdateBranch();
+        CurrentState.DoUpdateBranch();
     }
 
     protected override void FixedUpdate()
     {
         if(!bypassNetwork && !IsOwner) return;
         
-        currentState.DoFixedUpdateBranch();
+        CurrentState.DoFixedUpdateBranch();
     }
 
     private void HandleTransitions()
     {
         
-        if ((currentState == allStates["Move"] || currentState == allStates["Idle"]) &&
+        if ((CurrentState == allStates["Move"] || CurrentState == allStates["Idle"]) &&
             playerInput.attackPressedDownThisFrame)
         {
             SetState(allStates["Attack"]);
@@ -70,14 +70,14 @@ public class Player : StateMachineCore
             return;
         }
         
-        if ((currentState == allStates["Idle"] || currentState.isComplete) && playerInput.moveVector != Vector2.zero)
+        if ((CurrentState == allStates["Idle"] || CurrentState.IsComplete) && playerInput.moveVector != Vector2.zero)
         {
             SetState(allStates["Move"]);
             SetStateServerRpc("Move", false);
             return;
         }
         
-        if ((currentState == allStates["Move"] || currentState.isComplete) && playerInput.moveVector == Vector2.zero)
+        if ((CurrentState == allStates["Move"] || CurrentState.IsComplete) && playerInput.moveVector == Vector2.zero)
         {
             SetState(allStates["Idle"]);
             SetStateServerRpc("Idle", false);

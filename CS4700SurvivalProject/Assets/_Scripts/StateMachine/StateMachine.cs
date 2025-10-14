@@ -69,7 +69,7 @@ public List<State> GetActiveStateBranch(List<State> _list = null)
         else
         {
             _list.Add(currentState);
-            return currentState.stateMachine.GetActiveStateBranch(_list);
+            return currentState.StateMachine.GetActiveStateBranch(_list);
         }
 
     }
