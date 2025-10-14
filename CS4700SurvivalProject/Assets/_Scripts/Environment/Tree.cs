@@ -10,6 +10,7 @@ public class Tree : NetworkBehaviour, IDamageable
 {
     [SerializeField] private int maxHealth = 10;
     private NetworkVariable<int> health = new NetworkVariable<int>(100);
+    private NetworkVariable<bool> isAlive = new NetworkVariable<bool>(true);
     [SerializeField] private MMF_Player damageFeedback, timeFeedback;
     [SerializeField] private GameObject graphics;
     [SerializeField] private Collider2D collider;
@@ -19,8 +20,19 @@ public class Tree : NetworkBehaviour, IDamageable
 
     public override void OnNetworkSpawn()
     {
+        if (!isAlive.Value)
+        {
+            gameObject.SetActive(false);
+            return;
+        }
+        
         if (!IsServer) return;
         health.Value = maxHealth;
+    }
+
+    private void Update()
+    {
+
     }
     
     public void TakeDamage(int damage)
@@ -41,19 +53,18 @@ public class Tree : NetworkBehaviour, IDamageable
         }
     }
     
-    
-
     public void Die()
     {
         PlayDeathFeedbacksClientRpc();
+        isAlive.Value = false;
         Invoke(nameof(Destroy), 3f);
     }
 
-    public void Destroy()
+    private void Destroy()
     {
-        GetComponent<NetworkObject>().Despawn();
+        gameObject.SetActive(false);
     }
-
+    
     [ClientRpc]
     private void PlayDeathFeedbacksClientRpc()
     {
