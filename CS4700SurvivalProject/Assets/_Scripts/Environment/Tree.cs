@@ -2,39 +2,71 @@ using System.Collections;
 using System.Collections.Generic;
 using MoreMountains.Feedbacks;
 using UnityEngine;
+using Unity.Netcode;
+using UnityEngine.Rendering;
+using UnityEngine.Serialization;
 
-public class Tree : MonoBehaviour, IDamageable
+public class Tree : NetworkBehaviour, IDamageable
 {
     [SerializeField] private int maxHealth = 10;
-    private int health;
-    [SerializeField] private MMF_Player _mmfPlayer;
+    private NetworkVariable<int> health = new NetworkVariable<int>(100);
+    [SerializeField] private MMF_Player damageFeedback, timeFeedback;
     [SerializeField] private GameObject graphics;
     [SerializeField] private Collider2D collider;
     [SerializeField] private ParticleSystem deathParticles;
     [SerializeField] private AudioSource deathAudio;
 
-    public void Start()
+
+    public override void OnNetworkSpawn()
     {
-        health = maxHealth;
+        if (!IsServer) return;
+        health.Value = maxHealth;
     }
-            
+    
     public void TakeDamage(int damage)
     {
-        health -= damage;
-        _mmfPlayer.PlayFeedbacks();
-        if (health <= 0)
+        Debug.Log("Tree Taking Damage: " + IsSpawned);
+        TakeDamageServerRpc(damage);
+        timeFeedback.PlayFeedbacks();
+    }
+    
+    [ServerRpc(RequireOwnership = false)]
+    protected virtual void TakeDamageServerRpc(int damage)
+    {
+        health.Value -= damage;
+        PlayDamageFeedbacksClientRpc();
+        if (health.Value <= 0)
         {
             Die();
         }
     }
+    
+    
 
     public void Die()
+    {
+        PlayDeathFeedbacksClientRpc();
+        Invoke(nameof(Destroy), 3f);
+    }
+
+    public void Destroy()
+    {
+        GetComponent<NetworkObject>().Despawn();
+    }
+
+    [ClientRpc]
+    private void PlayDeathFeedbacksClientRpc()
     {
         graphics.SetActive(false);
         deathParticles.GetComponent<Renderer>().sortingOrder = graphics.GetComponent<Renderer>().sortingOrder + 1;
         deathParticles.Play();
         collider.enabled = false;
         deathAudio.Play();
-        Destroy(gameObject, 3f);
+    }
+
+    [ClientRpc]
+    private void PlayDamageFeedbacksClientRpc()
+    {
+        damageFeedback.PlayFeedbacks();
     }
 }

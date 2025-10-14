@@ -119,7 +119,7 @@ public abstract class StateMachineCore : NetworkBehaviour
         Debug.Log($"Client {OwnerClientId} state changed to {allStates[stateName]}");
         SetState(allStates[stateName], forceReset);
     }
-    [ServerRpc] 
+    [ServerRpc(RequireOwnership = false)] 
     public void SetStateServerRpc(string stateName, bool forceReset)
     {
         SetStateClientRpc(stateName, forceReset);
