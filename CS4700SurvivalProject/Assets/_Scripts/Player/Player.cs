@@ -7,17 +7,20 @@ using UnityEngine.Serialization;
 
 public class Player : NetworkBehaviour
 {
-    public StateMachine<Player> StateMachine { get; private set; }
+    [field:Header("Components")] 
+    [field:SerializeField] public PlayerInput PlayerInput { get; private set; }
+    [field:SerializeField] public Transform Pivot { get; private set; }
+    [field:SerializeField] public PlayerStats Stats { get; private set; }
+    [field:SerializeField] public Rigidbody2D Rb { get; private set; }
+    [field:SerializeField] public Animator Animator { get; private set; }
+    [field:SerializeField] public float Speed { get; private set; }
+    
     [field: HorizontalLine(color: EColor.Gray)]
-    [field: Header("States")]
-    
-    
-    
-    [Header("Components")] 
-    [SerializeField] public PlayerInput playerInput;
-    [SerializeField] public Transform pivot;
-    [SerializeField] public PlayerStats stats;
-    [SerializeField] private float speed;
+    [field: Header("State Machine")]
+    public StateMachine<Player> StateMachine { get; private set; }
+    [field: SerializeField] public PlayerMove MoveState { get; private set; } = new();
+    [field: SerializeField] public PlayerIdle IdleState { get; private set; } = new();
+    [field: SerializeField] public PlayerAttack AttackState  { get; private set; } = new();
 
     [Header("Debug")]
     [SerializeField] private bool bypassNetwork;
@@ -31,15 +34,15 @@ public class Player : NetworkBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        SetupInstances();
-        SetState(allStates["Idle"]);
-        SetStateServerRpc("Idle", false);
+        SetupStateMachine();
+        StateMachine.SetState(IdleState);
+        // SetStateServerRpc("Idle", false);
         
         if(!bypassNetwork && !IsOwner) return; 
     }
 
     // Update is called once per frame
-    protected override void Update()
+    private void Update()
     {
         if(!bypassNetwork && !IsOwner) return;
         
@@ -52,48 +55,56 @@ public class Player : NetworkBehaviour
         
         CameraManager.Instance?.SetPlayerFollow(transform);
         
-        CurrentState.DoUpdateBranch();
+        StateMachine.Update();
     }
 
-    protected override void FixedUpdate()
+    private void FixedUpdate()
     {
         if(!bypassNetwork && !IsOwner) return;
         
-        CurrentState.DoFixedUpdateBranch();
+        StateMachine.FixedUpdate();
     }
 
     private void HandleTransitions()
     {
         
-        if ((CurrentState == allStates["Move"] || CurrentState == allStates["Idle"]) &&
-            playerInput.attackPressedDownThisFrame)
+        if ((StateMachine.CurrentState == MoveState || StateMachine.CurrentState == IdleState) &&
+            PlayerInput.attackPressedDownThisFrame)
         {
-            SetState(allStates["Attack"]);
-            SetStateServerRpc("Attack", false);
+            StateMachine.SetState(AttackState);
+            // SetStateServerRpc("Attack", false);
             return;
         }
         
-        if ((CurrentState == allStates["Idle"] || CurrentState.IsComplete) && playerInput.moveVector != Vector2.zero)
+        if ((StateMachine.CurrentState == IdleState || StateMachine.CurrentState.IsComplete) && PlayerInput.moveVector != Vector2.zero)
         {
-            SetState(allStates["Move"]);
-            SetStateServerRpc("Move", false);
+            StateMachine.SetState(MoveState);
+            // SetStateServerRpc("Move", false);
             return;
         }
         
-        if ((CurrentState == allStates["Move"] || CurrentState.IsComplete) && playerInput.moveVector == Vector2.zero)
+        if ((StateMachine.CurrentState == MoveState || StateMachine.CurrentState.IsComplete) && PlayerInput.moveVector == Vector2.zero)
         {
-            SetState(allStates["Idle"]);
-            SetStateServerRpc("Idle", false);
+            StateMachine.SetState(IdleState);
+            // SetStateServerRpc("Idle", false);
             return;
         }
     }
 
-    private void ChangeState(string newState, bool forceReset)
+    private void SetupStateMachine()
     {
-        SetState(allStates[newState], forceReset);
+        StateMachine = new StateMachine<Player>(this);
+        MoveState.Init(this);
+        IdleState.Init(this);
+        AttackState.Init(this);
         
-        if(!bypassNetwork && !IsOwner) return;
-        
-        SetStateServerRpc(newState, forceReset);
     }
+    // private void ChangeState(string newState, bool forceReset)
+    // {
+    //     StateMachine.SetState(allStates[newState], forceReset);
+    //     
+    //     if(!bypassNetwork && !IsOwner) return;
+    //     
+    //     SetStateServerRpc(newState, forceReset);
+    // }
 }

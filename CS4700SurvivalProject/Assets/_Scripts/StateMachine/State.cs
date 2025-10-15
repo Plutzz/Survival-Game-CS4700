@@ -8,7 +8,7 @@ using UnityEngine;
 /// Base class that all states inherit from
 /// </summary>
 
-[Serializable]
+[System.Serializable]
 public class State<TContext>
 {
     public TContext Context { get; private set; }
@@ -17,13 +17,12 @@ public class State<TContext>
     protected float StateUptime = 0;
 
     public StateMachine<TContext> StateMachine;
-    public State<TContext> CurrentState => StateMachine.CurrentState;
     public void SetState(State<TContext> newState, bool forceReset = false)
     {
         StateMachine.SetState(newState, forceReset);
     }
 
-    public void Initialize(TContext context)
+    public void Init(TContext context)
     {
         Context = context;
     }
@@ -37,19 +36,19 @@ public class State<TContext>
     /// <summary>
     /// State-Cleanup.
     /// </summary>
-    public virtual void ExitState() { CurrentState?.ExitState(); ResetValues(); }
+    public virtual void ExitState() { StateMachine?.CurrentState?.ExitState(); ResetValues(); }
 
     /// <summary>
     /// This method is called once every frame while this state is active.
     /// Consider this the "Update" method of this state.
     /// </summary>
-    public virtual void UpdateState() { CurrentState?.UpdateState(); HandleTimer(); }
+    public virtual void UpdateState() { StateMachine?.CurrentState?.UpdateState(); HandleTimer(); }
 
     /// <summary>
     /// This method is called once every physics frame while this state is active.
     /// Consider this the "FixedUpdate" method of this state.
     /// </summary>
-    public virtual void FixedUpdateState() { CurrentState?.FixedUpdateState(); }
+    public virtual void FixedUpdateState() { StateMachine?.CurrentState?.FixedUpdateState(); }
     
 
     /// <summary>

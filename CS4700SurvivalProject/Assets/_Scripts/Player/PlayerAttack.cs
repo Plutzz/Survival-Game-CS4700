@@ -4,32 +4,33 @@ using Unity.Netcode;
 using UnityEngine;
 using UnityEngine.Serialization;
 
+[System.Serializable]
 public class PlayerAttack : State<Player>
 {
-    [SerializeField] private AnimationClip up, right, left, down;
-    [SerializeField] private float attackTime = 0.5f;
-    [SerializeField] private DamageBox weaponHitbox;
+    [SerializeField] public AnimationClip Up, Right, Left, Down;
+    [SerializeField] public float AttackTime = 0.5f;
+    [SerializeField] public DamageBox WeaponHitbox;
 
     public override void EnterState()
     {
         base.EnterState();
-        weaponHitbox.gameObject.SetActive(true);
-        weaponHitbox.ClearHasBeenDamaged();
+        WeaponHitbox.gameObject.SetActive(true);
+        WeaponHitbox.ClearHasBeenDamaged();
         if (Mathf.Abs(Context.lookDir.Value.x) > Mathf.Abs(Context.lookDir.Value.y))
         {
 
             if (Context.lookDir.Value.x > 0)
             {
-                weaponHitbox.transform.localPosition = new Vector3(-Mathf.Abs(weaponHitbox.transform.localPosition.x),
-                    weaponHitbox.transform.localPosition.y, weaponHitbox.transform.localPosition.z);
-                Animator.Play(right.name);
+                WeaponHitbox.transform.localPosition = new Vector3(-Mathf.Abs(WeaponHitbox.transform.localPosition.x),
+                    WeaponHitbox.transform.localPosition.y, WeaponHitbox.transform.localPosition.z);
+                Context.Animator.Play(Right.name);
             }
 
             else
             {
-                weaponHitbox.transform.localPosition = new Vector3(Mathf.Abs(weaponHitbox.transform.localPosition.x),
-                    weaponHitbox.transform.localPosition.y, weaponHitbox.transform.localPosition.z);
-                Animator.Play(left.name);
+                WeaponHitbox.transform.localPosition = new Vector3(Mathf.Abs(WeaponHitbox.transform.localPosition.x),
+                    WeaponHitbox.transform.localPosition.y, WeaponHitbox.transform.localPosition.z);
+                Context.Animator.Play(Left.name);
             }
                 
         }
@@ -37,16 +38,16 @@ public class PlayerAttack : State<Player>
         {
             if (Context.lookDir.Value.y > 0)
             {
-                weaponHitbox.transform.localPosition = new Vector3(Mathf.Abs(weaponHitbox.transform.localPosition.x),
-                    weaponHitbox.transform.localPosition.y, weaponHitbox.transform.localPosition.z);
-                Animator.Play(up.name);
+                WeaponHitbox.transform.localPosition = new Vector3(Mathf.Abs(WeaponHitbox.transform.localPosition.x),
+                    WeaponHitbox.transform.localPosition.y, WeaponHitbox.transform.localPosition.z);
+                Context.Animator.Play(Up.name);
             }
 
             else
             {
-                weaponHitbox.transform.localPosition = new Vector3(-Mathf.Abs(weaponHitbox.transform.localPosition.x),
-                    weaponHitbox.transform.localPosition.y, weaponHitbox.transform.localPosition.z);
-                Animator.Play(down.name);
+                WeaponHitbox.transform.localPosition = new Vector3(-Mathf.Abs(WeaponHitbox.transform.localPosition.x),
+                    WeaponHitbox.transform.localPosition.y, WeaponHitbox.transform.localPosition.z);
+                Context.Animator.Play(Down.name);
             }
                 
         }
@@ -56,17 +57,17 @@ public class PlayerAttack : State<Player>
     public override void ExitState()
     {
         base.ExitState();
-        weaponHitbox.gameObject.SetActive(false);
+        WeaponHitbox.gameObject.SetActive(false);
         
     }
     public override void UpdateState()
     {
         base.UpdateState();
         
-        Vector2 moveInput = Context.playerInput.moveVector.normalized;
-        Rb.velocity = moveInput * Context.stats.moveSpeed;
+        Vector2 moveInput = Context.PlayerInput.moveVector.normalized;
+        Context.Rb.velocity = moveInput * Context.Stats.moveSpeed;
         
-        if (StateUptime > attackTime)
+        if (StateUptime > AttackTime)
         {
             IsComplete = true;
         }

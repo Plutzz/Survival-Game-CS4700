@@ -4,39 +4,40 @@ using MoreMountains.Feedbacks;
 using UnityEngine;
 using UnityEngine.Serialization;
 
-public class PlayerMove : State<Player
+[System.Serializable]
+public class PlayerMove : State<Player>
 {
-    [SerializeField] private AnimationClip up, right, left, down;
-    [SerializeField] private float itemBobSpeed;
-    [SerializeField] private float itemBobAmount;
-    [SerializeField] private Transform itemHold;
-    private PlayerStats stats => Context.stats;
-    private PlayerInput input => Context.playerInput;
+    [SerializeField] public AnimationClip Up, Right, Left, Down;
+    [SerializeField] public float ItemBobSpeed;
+    [SerializeField] public float ItemBobAmount;
+    [SerializeField] public Transform ItemHold;
+    private PlayerStats _stats => Context.Stats;
+    private PlayerInput _input => Context.PlayerInput;
     public override void UpdateState()
     {
-        Vector2 moveInput = input.moveVector.normalized;
-        Rb.velocity = moveInput * stats.moveSpeed;
+        Vector2 moveInput = _input.moveVector.normalized;
+        Context.Rb.velocity = moveInput * _stats.moveSpeed;
         
         // Item Bob
         float step = 1f / 16f; // 0.0625
-        float newY = Mathf.Sin(Time.time * itemBobSpeed) * itemBobAmount;
+        float newY = Mathf.Sin(Time.time * ItemBobSpeed) * ItemBobAmount;
         newY = Mathf.Round(newY / step) * step;
-        itemHold.localPosition = new Vector3(0, newY, 0);
+        ItemHold.localPosition = new Vector3(0, newY, 0);
         
         if (Mathf.Abs(Context.lookDir.Value.x) > Mathf.Abs(Context.lookDir.Value.y))
         {
             
             if (Context.lookDir.Value.x > 0)
-                Animator.Play(right.name);
+                Context.Animator.Play(Right.name);
             else
-                Animator.Play(left.name);
+                Context.Animator.Play(Left.name);
         }
         else
         {
             if (Context.lookDir.Value.y > 0)
-                Animator.Play(up.name);
+                Context.Animator.Play(Up.name);
             else
-                Animator.Play(down.name);
+                Context.Animator.Play(Down.name);
         }
         base.UpdateState();
     }
@@ -44,7 +45,7 @@ public class PlayerMove : State<Player
     public override void ExitState()
     {
         Debug.Log("Reset Item Hold");
-        itemHold.localPosition = new Vector3(0, 0, 0);
+        ItemHold.localPosition = new Vector3(0, 0, 0);
         base.ExitState();
     }
 }
