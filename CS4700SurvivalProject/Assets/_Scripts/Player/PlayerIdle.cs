@@ -2,32 +2,31 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PlayerIdle : State
+public class PlayerIdle : State<Player>
 {
     [SerializeField] private AnimationClip up, right, left, down;
-    [SerializeField] private Player player;
 
-    public override void DoEnterState()
+    public override void EnterState()
     {
         Rb.velocity = new Vector2(0, 0);
-        base.DoEnterState();
+        base.EnterState();
     }
-    public override void DoUpdateState()
+    public override void UpdateState()
     {
-        if (Mathf.Abs(player.lookDir.Value.x) > Mathf.Abs(player.lookDir.Value.y))
+        if (Mathf.Abs(Context.lookDir.Value.x) > Mathf.Abs(Context.lookDir.Value.y))
         {
-            if (player.lookDir.Value.x > 0)
+            if (Context.lookDir.Value.x > 0)
                 Animator.Play(right.name);
             else
                 Animator.Play(left.name);
         }
         else
         {
-            if (player.lookDir.Value.y > 0)
+            if (Context.lookDir.Value.y > 0)
                 Animator.Play(up.name);
             else
                 Animator.Play(down.name);
         }
-        base.DoUpdateState();
+        base.UpdateState();
     }
 }

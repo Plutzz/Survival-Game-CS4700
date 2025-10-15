@@ -4,21 +4,21 @@ using Unity.Netcode;
 using UnityEngine;
 using UnityEngine.Serialization;
 
-public class PlayerAttack : State
+public class PlayerAttack : State<Player>
 {
     [SerializeField] private AnimationClip up, right, left, down;
-    [SerializeField] private Player player;
     [SerializeField] private float attackTime = 0.5f;
     [SerializeField] private DamageBox weaponHitbox;
 
-    public override void DoEnterState()
+    public override void EnterState()
     {
+        base.EnterState();
         weaponHitbox.gameObject.SetActive(true);
         weaponHitbox.ClearHasBeenDamaged();
-        if (Mathf.Abs(player.lookDir.Value.x) > Mathf.Abs(player.lookDir.Value.y))
+        if (Mathf.Abs(Context.lookDir.Value.x) > Mathf.Abs(Context.lookDir.Value.y))
         {
 
-            if (player.lookDir.Value.x > 0)
+            if (Context.lookDir.Value.x > 0)
             {
                 weaponHitbox.transform.localPosition = new Vector3(-Mathf.Abs(weaponHitbox.transform.localPosition.x),
                     weaponHitbox.transform.localPosition.y, weaponHitbox.transform.localPosition.z);
@@ -35,7 +35,7 @@ public class PlayerAttack : State
         }
         else
         {
-            if (player.lookDir.Value.y > 0)
+            if (Context.lookDir.Value.y > 0)
             {
                 weaponHitbox.transform.localPosition = new Vector3(Mathf.Abs(weaponHitbox.transform.localPosition.x),
                     weaponHitbox.transform.localPosition.y, weaponHitbox.transform.localPosition.z);
@@ -50,24 +50,27 @@ public class PlayerAttack : State
             }
                 
         }
-        base.DoEnterState();
+        
     }
 
-    public override void DoExitState()
+    public override void ExitState()
     {
+        base.ExitState();
         weaponHitbox.gameObject.SetActive(false);
-        base.DoExitState();
+        
     }
-    public override void DoUpdateState()
+    public override void UpdateState()
     {
-        Vector2 moveInput = player.playerInput.moveVector.normalized;
-        Rb.velocity = moveInput * player.stats.moveSpeed;
+        base.UpdateState();
+        
+        Vector2 moveInput = Context.playerInput.moveVector.normalized;
+        Rb.velocity = moveInput * Context.stats.moveSpeed;
         
         if (StateUptime > attackTime)
         {
             IsComplete = true;
         }
         
-        base.DoUpdateState();
+        
     }
 }

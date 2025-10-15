@@ -4,16 +4,15 @@ using MoreMountains.Feedbacks;
 using UnityEngine;
 using UnityEngine.Serialization;
 
-public class PlayerMove : State
+public class PlayerMove : State<Player
 {
-    [SerializeField] private Player player;
     [SerializeField] private AnimationClip up, right, left, down;
     [SerializeField] private float itemBobSpeed;
     [SerializeField] private float itemBobAmount;
     [SerializeField] private Transform itemHold;
-    private PlayerStats stats => player.stats;
-    private PlayerInput input => player.playerInput;
-    public override void DoUpdateState()
+    private PlayerStats stats => Context.stats;
+    private PlayerInput input => Context.playerInput;
+    public override void UpdateState()
     {
         Vector2 moveInput = input.moveVector.normalized;
         Rb.velocity = moveInput * stats.moveSpeed;
@@ -24,28 +23,28 @@ public class PlayerMove : State
         newY = Mathf.Round(newY / step) * step;
         itemHold.localPosition = new Vector3(0, newY, 0);
         
-        if (Mathf.Abs(player.lookDir.Value.x) > Mathf.Abs(player.lookDir.Value.y))
+        if (Mathf.Abs(Context.lookDir.Value.x) > Mathf.Abs(Context.lookDir.Value.y))
         {
             
-            if (player.lookDir.Value.x > 0)
+            if (Context.lookDir.Value.x > 0)
                 Animator.Play(right.name);
             else
                 Animator.Play(left.name);
         }
         else
         {
-            if (player.lookDir.Value.y > 0)
+            if (Context.lookDir.Value.y > 0)
                 Animator.Play(up.name);
             else
                 Animator.Play(down.name);
         }
-        base.DoUpdateState();
+        base.UpdateState();
     }
 
-    public override void DoExitState()
+    public override void ExitState()
     {
         Debug.Log("Reset Item Hold");
         itemHold.localPosition = new Vector3(0, 0, 0);
-        base.DoExitState();
+        base.ExitState();
     }
 }

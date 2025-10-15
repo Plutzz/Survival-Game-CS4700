@@ -5,11 +5,14 @@ using NaughtyAttributes;
 using Unity.Netcode;
 using UnityEngine.Serialization;
 
-public class Player : StateMachineCore
+public class Player : NetworkBehaviour
 {
+    public StateMachine<Player> StateMachine { get; private set; }
     [field: HorizontalLine(color: EColor.Gray)]
     [field: Header("States")]
-
+    
+    
+    
     [Header("Components")] 
     [SerializeField] public PlayerInput playerInput;
     [SerializeField] public Transform pivot;

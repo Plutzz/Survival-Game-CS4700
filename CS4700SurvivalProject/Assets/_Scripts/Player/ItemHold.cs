@@ -14,7 +14,7 @@ public class ItemHold : NetworkBehaviour
     private ItemHoldPosition currentPosition;
     private void Update()
     {
-        if (IsOwner && player.CurrentState is PlayerAttack) return;
+        if (IsOwner && player.StateMachine.CurrentState is PlayerAttack) return;
         
         
         if (Mathf.Abs(player.lookDir.Value.x) > Mathf.Abs(player.lookDir.Value.y))

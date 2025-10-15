@@ -1,62 +1,55 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using Unity.Netcode;
 using UnityEngine;
 
 /// <summary>
-/// Base class that all state scriptable objects inherit from.
+/// Base class that all states inherit from
 /// </summary>
-public class State : NetworkBehaviour
-{
-    protected StateMachineCore Core;
 
-    protected Rigidbody2D Rb => Core.rb;
-    protected Animator Animator => Core.animator;
+[Serializable]
+public class State<TContext>
+{
+    public TContext Context { get; private set; }
     public bool IsComplete { get; protected set; }
 
     protected float StateUptime = 0;
 
-    public StateMachine StateMachine;
-
-    public StateMachine Parent;
-    public State CurrentState => StateMachine.currentState;
-    public void SetState(State newState, bool forceReset = false)
+    public StateMachine<TContext> StateMachine;
+    public State<TContext> CurrentState => StateMachine.CurrentState;
+    public void SetState(State<TContext> newState, bool forceReset = false)
     {
         StateMachine.SetState(newState, forceReset);
     }
 
-    /// <summary>
-    /// Passes the StateMachineCore to this state.
-    /// Can be overriden to initialize additional parameters
-    /// </summary>
-    /// <param name="core"></param>
-    public virtual void SetCore(StateMachineCore core)
+    public void Initialize(TContext context)
     {
-        StateMachine = new StateMachine();
-        Core = core;
+        Context = context;
     }
+    
     /// <summary>
     /// Setup state, e.g. starting animations.
     /// Consider this the "Start" method of this state.
     /// </summary>
-    public virtual void DoEnterState() { }
+    public virtual void EnterState() { }
 
     /// <summary>
     /// State-Cleanup.
     /// </summary>
-    public virtual void DoExitState() { CurrentState?.DoExitState(); ResetValues(); }
+    public virtual void ExitState() { CurrentState?.ExitState(); ResetValues(); }
 
     /// <summary>
     /// This method is called once every frame while this state is active.
     /// Consider this the "Update" method of this state.
     /// </summary>
-    public virtual void DoUpdateState() { CheckTransitions(); HandleTimer(); }
+    public virtual void UpdateState() { CurrentState?.UpdateState(); HandleTimer(); }
 
     /// <summary>
     /// This method is called once every physics frame while this state is active.
     /// Consider this the "FixedUpdate" method of this state.
     /// </summary>
-    public virtual void DoFixedUpdateState() { }
+    public virtual void FixedUpdateState() { CurrentState?.FixedUpdateState(); }
     
 
     /// <summary>
@@ -64,35 +57,9 @@ public class State : NetworkBehaviour
     /// Use this method to reset or null out values during state cleanup.
     /// </summary>
     public virtual void ResetValues() { StateUptime = 0f; IsComplete = false; }
-
-    /// <summary>
-    /// This method contains checks for all transitions from the current state.
-    /// To be called in the UpdateState() or FixedUpdateState() methods.
-    /// </summary>
-    public virtual void CheckTransitions() { }
-
-
     protected void HandleTimer()
     {
         StateUptime += Time.deltaTime;
-    }
-
-    /// <summary>
-    /// Calls DoUpdate for every state down the branch
-    /// </summary>
-    public void DoUpdateBranch()
-    {
-        CurrentState?.DoUpdateBranch();
-        DoUpdateState();
-    }
-
-    /// <summary>
-    /// Calls DoFixedUpdate for every state down the branch
-    /// </summary>
-    public void DoFixedUpdateBranch()
-    {
-        CurrentState?.DoFixedUpdateBranch();
-        DoFixedUpdateState();
     }
 
 }
