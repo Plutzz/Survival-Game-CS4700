@@ -426,6 +426,9 @@ MonoBehaviour:
   - {fileID: 451022297}
   - {fileID: 157843656}
   joinCodeTextInput: {fileID: 940807269}
+  gameScene:
+    m_SceneAsset: {fileID: 102900000, guid: 8c9cfa26abfee488c85f1582747f6a02, type: 3}
+    m_SceneName: TilemapDemo
   optionIndex: 0
 --- !u!1001 &125799808
 PrefabInstance:

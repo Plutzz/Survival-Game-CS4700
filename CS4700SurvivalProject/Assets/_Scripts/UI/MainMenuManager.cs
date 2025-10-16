@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using MoreMountains.Feedbacks;
 using TMPro;
+using Unity.Netcode;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -10,6 +11,7 @@ public class MainMenuManager : Singleton<MainMenuManager>
     [SerializeField] private MMF_Player loadScenePlayer;
     [SerializeField] private GameObject[] menus;
     [SerializeField] private MenuTextInput joinCodeTextInput;
+    [SerializeField] private SceneField gameScene;
     public int optionIndex;
     [HideInInspector] public bool isTyping { get; private set; } = false;
     public void StartSelectOption()
@@ -61,17 +63,14 @@ public class MainMenuManager : Singleton<MainMenuManager>
             // Save1
             case 0:
                 HostGame();
-                loadScenePlayer.PlayFeedbacks();
                 break;
             // Save2
             case 1:
                 HostGame();
-                loadScenePlayer.PlayFeedbacks();
                 break;
             // Save3
             case 2:
                 HostGame();
-                loadScenePlayer.PlayFeedbacks();
                 break;
             // Back to Join/Host
             case 3:
@@ -94,7 +93,7 @@ public class MainMenuManager : Singleton<MainMenuManager>
                 bool joined = await RelayManager.Instance.JoinRelay(joinCodeTextInput.currentInput);
                 if (joined)
                 {
-                    loadScenePlayer.PlayFeedbacks();
+                    LoadGameScene();
                 }
                 else
                 {
@@ -190,10 +189,18 @@ public class MainMenuManager : Singleton<MainMenuManager>
         {
             // Show this on UI so your friend can enter it
             Debug.Log("Game started! Share join code: " + joinCode);
+            LoadGameScene();
         }
         else
         {
             Debug.LogError("Something went wrong while hosting game");
         }
+    }
+
+    private void LoadGameScene()
+    {
+        Debug.Log(gameScene.SceneName);
+        Debug.Log(NetworkManager.Singleton.SceneManager);
+        NetworkManager.Singleton.SceneManager.LoadScene(gameScene.SceneName, LoadSceneMode.Single);
     }
 }
