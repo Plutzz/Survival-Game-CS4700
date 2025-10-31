@@ -8,7 +8,7 @@ public class ResultSlot : MonoBehaviour
     public GameObject InventoryItemPrefab;
     public System.Action OnResultTaken;
     private InventoryItem spawnedResultItem;
-    [HideInInspector]public bool itemClaimed = false;
+    [HideInInspector] public bool itemClaimed = false;
 
     public bool ClaimResult(out InventoryItem item)
     {
@@ -59,5 +59,14 @@ public class ResultSlot : MonoBehaviour
         spawnedResultItem.count = 1;
         spawnedResultItem.RefreshCount();
         spawnedResultItem.parentResultSlot = this;
+        // Remember the UI parent so the item can be returned if needed
+        if (spawnedResultItem != null && resultSlot != null)
+            spawnedResultItem.parentAfterDrag = resultSlot.transform;
+    }
+
+    // Expose the transform of the result slot for other systems to return items to
+    public Transform GetResultSlotTransform()
+    {
+        return resultSlot != null ? resultSlot.transform : null;
     }
 }

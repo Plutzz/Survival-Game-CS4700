@@ -12,7 +12,7 @@ public class DemoScript : MonoBehaviour
         bool result = inventoryManager.AddItem(itemsToPickup[id]);
         if (result)
         {
-            Debug.Log("Item Added");
+            Debug.Log("Item Added: " + itemsToPickup[id] + " Item ID:" + id);
         }
         else
         {
