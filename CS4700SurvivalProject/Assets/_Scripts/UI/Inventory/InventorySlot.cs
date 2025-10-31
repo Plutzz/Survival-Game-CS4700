@@ -32,6 +32,17 @@ public class InventorySlot : MonoBehaviour, IDropHandler
             }
         }
 
+        // Get InventoryManager to help find empty slots
+        InventoryManager inventoryManager = InventoryManager.Instance;
+        if (inventoryManager == null)
+        {
+            Debug.LogError("InventoryManager not found!");
+            return;
+        }
+
+        // Handle result items differently to avoid invalid swaps with result slot
+        bool isFromResultSlot = droppedItem.parentResultSlot != null;
+
         if (currentItem == null)
         {
             // Slot empty: just assign
@@ -39,58 +50,73 @@ public class InventorySlot : MonoBehaviour, IDropHandler
             droppedItem.transform.SetParent(transform, false);
             droppedItem.transform.localPosition = Vector3.zero;
         }
-        else
+        else if (currentItem.item == droppedItem.item && currentItem.item != null && currentItem.item.stackable)
         {
-            // Slot occupied: if the dragged item came from a result slot, do not allow swapping
-            if (droppedItem.parentResultSlot != null)
-            {
-                Debug.Log("Cannot swap when dragging from a result slot. Returning item to its origin.");
-                // snap the dragged item back to its origin
-                Transform target = droppedItem.parentAfterDrag;
-                if (target == null && droppedItem.parentResultSlot != null)
-                    target = droppedItem.parentResultSlot.GetResultSlotTransform();
+            // Merge stacks: add count to existing and destroy the dragged UI
+            currentItem.count += droppedItem.count;
+            currentItem.RefreshCount();
 
-                if (target != null)
+            // Stop drag on the source and destroy the dragged UI element (it has been merged)
+            droppedItem.StopDragging();
+            Destroy(dropped);
+        }
+        else if (isFromResultSlot)
+        {
+            // If item is from result slot and target is occupied, find an empty inventory slot
+            bool found = false;
+            foreach (InventorySlot slot in inventoryManager.inventorySlots)
+            {
+                if (slot.isResultSlot) continue; // Skip result slots
+
+                InventoryItem existingItem = null;
+                for (int i = 0; i < slot.transform.childCount; i++)
                 {
-                    droppedItem.transform.SetParent(target, false);
-                    droppedItem.transform.localPosition = Vector3.zero;
+                    existingItem = slot.transform.GetChild(i).GetComponent<InventoryItem>();
+                    if (existingItem != null) break;
                 }
-                droppedItem.StopDragging();
-                return;
+
+                if (existingItem == null)
+                {
+                    // Found empty slot - place item here
+                    droppedItem.parentAfterDrag = slot.transform;
+                    droppedItem.transform.SetParent(slot.transform, false);
+                    droppedItem.transform.localPosition = Vector3.zero;
+                    found = true;
+                    break;
+                }
             }
 
-            // Slot occupied: if same item and stackable, merge; otherwise swap
-            if (currentItem.item == droppedItem.item && currentItem.item != null && currentItem.item.stackable)
+            if (!found)
             {
-                // Merge stacks: add count to existing and destroy the dragged UI
-                currentItem.count += droppedItem.count;
-                currentItem.RefreshCount();
+                // No empty slots - snap back to original position
+                Debug.Log("No empty slots available for result item");
+                if (droppedItem.parentAfterDrag != null)
+                {
+                    droppedItem.transform.SetParent(droppedItem.parentAfterDrag, false);
+                    droppedItem.transform.localPosition = Vector3.zero;
+                }
+            }
+        }
+        else
+        {
+            // Normal swap for non-result items
+            Transform oldParent = droppedItem.parentAfterDrag;
 
-                // Stop drag on the source and destroy the dragged UI element (it has been merged)
-                droppedItem.StopDragging();
-                Destroy(dropped);
+            // Put dropped item into this slot
+            droppedItem.parentAfterDrag = transform;
+            droppedItem.transform.SetParent(transform, false);
+            droppedItem.transform.localPosition = Vector3.zero;
+
+            // Move current item to the old slot of dropped item
+            if (oldParent != null)
+            {
+                currentItem.parentAfterDrag = oldParent;
+                currentItem.transform.SetParent(oldParent, false);
+                currentItem.transform.localPosition = Vector3.zero;
             }
             else
             {
-                // Swap items
-                Transform oldParent = droppedItem.parentAfterDrag;
-
-                // Put dropped item into this slot
-                droppedItem.parentAfterDrag = transform;
-                droppedItem.transform.SetParent(transform, false);
-                droppedItem.transform.localPosition = Vector3.zero;
-
-                // Move current item to the old slot of dropped item
-                if (oldParent != null)
-                {
-                    currentItem.parentAfterDrag = oldParent;
-                    currentItem.transform.SetParent(oldParent, false);
-                    currentItem.transform.localPosition = Vector3.zero;
-                }
-                else
-                {
-                    Debug.LogWarning("Dropped item had no valid parent to swap with.");
-                }
+                Debug.LogWarning("Dropped item had no valid parent to swap with.");
             }
         }
     }
