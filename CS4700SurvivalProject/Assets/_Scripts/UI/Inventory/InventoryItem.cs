@@ -39,6 +39,13 @@ public class InventoryItem : MonoBehaviour, IBeginDragHandler, IDragHandler, IEn
         countText.text = count.ToString();
         bool textActive = count > 1;
         countText.gameObject.SetActive(textActive);
+        // If this item is inside a crafting slot, notify the slot that its contents changed
+        // so crafting recipes can be re-evaluated when stack counts change.
+        var craftingSlot = GetComponentInParent<CraftingSlot>();
+        if (craftingSlot != null)
+        {
+            craftingSlot.NotifySlotUpdated();
+        }
     }
 
     public void OnBeginDrag(PointerEventData eventData)

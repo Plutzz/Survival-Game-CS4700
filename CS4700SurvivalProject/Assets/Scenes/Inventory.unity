@@ -5262,8 +5262,8 @@ RectTransform:
   - {fileID: 1363871692}
   - {fileID: 1839961221}
   - {fileID: 490246227}
-  - {fileID: 686104179}
   - {fileID: 952000518}
+  - {fileID: 686104179}
   - {fileID: 1355649577}
   m_Father: {fileID: 1727413396}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -5290,8 +5290,8 @@ MonoBehaviour:
   - {fileID: 1363871696}
   - {fileID: 1839961225}
   - {fileID: 765458976}
-  - {fileID: 686104183}
   - {fileID: 1125669934}
+  - {fileID: 686104183}
   - {fileID: 2066231692}
   recipes:
   - {fileID: 11400000, guid: 5344633d48f4b9849aef3d2090056f93, type: 2}
