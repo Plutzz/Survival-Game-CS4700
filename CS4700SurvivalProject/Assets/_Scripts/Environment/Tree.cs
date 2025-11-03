@@ -22,7 +22,7 @@ public class Tree : NetworkBehaviour, IDamageable
     {
         if (!isAlive.Value)
         {
-            gameObject.SetActive(false);
+            Destroy(gameObject);
             return;
         }
         
@@ -62,7 +62,7 @@ public class Tree : NetworkBehaviour, IDamageable
 
     private void Destroy()
     {
-        gameObject.SetActive(false);
+        NetworkObject.Despawn();
     }
     
     [ClientRpc]

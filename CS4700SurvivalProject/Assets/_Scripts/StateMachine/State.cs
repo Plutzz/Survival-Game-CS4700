@@ -25,6 +25,7 @@ public class State<TContext>
     public void Init(TContext context)
     {
         Context = context;
+        StateMachine = new StateMachine<TContext>(context);
     }
     
     /// <summary>
@@ -36,7 +37,7 @@ public class State<TContext>
     /// <summary>
     /// State-Cleanup.
     /// </summary>
-    public virtual void ExitState() { StateMachine?.CurrentState?.ExitState(); ResetValues(); }
+    public virtual void ExitState() { StateMachine?.CurrentState?.ExitState(); StateUptime = 0f; IsComplete = false; }
 
     /// <summary>
     /// This method is called once every frame while this state is active.
@@ -50,12 +51,6 @@ public class State<TContext>
     /// </summary>
     public virtual void FixedUpdateState() { StateMachine?.CurrentState?.FixedUpdateState(); }
     
-
-    /// <summary>
-    /// This method is called during ExitLogic().
-    /// Use this method to reset or null out values during state cleanup.
-    /// </summary>
-    public virtual void ResetValues() { StateUptime = 0f; IsComplete = false; }
     protected void HandleTimer()
     {
         StateUptime += Time.deltaTime;

@@ -1,24 +1,29 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using Unity.Netcode;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 public class Enemy : NetworkBehaviour, IDamageable
 {
-    [SerializeField] protected NetworkVariable<int> health = new NetworkVariable<int>(100);
-    
-    protected void Update()
-    {
-        if (!IsServer) return;
-        DoAI();
-    }
 
-    /// <summary>
-    /// This is the method you should override and write the enemy AI in (runs in update on server only)
-    /// </summary>
-    public virtual void DoAI()
+    public Action OnTakeDamageServerRpc;
+    
+    [field: SerializeField] public Rigidbody2D rb { get; private set; }
+    [field: SerializeField] public Animator animator { get; private set; }
+
+    [SerializeField] protected NetworkVariable<int> health = new NetworkVariable<int>(100);
+    private NetworkVariable<bool> isAlive = new NetworkVariable<bool>(true);
+
+    public override void OnNetworkSpawn()
     {
-        
+        base.OnNetworkSpawn();
+        if (!isAlive.Value)
+        {
+            Destroy(gameObject);
+            return;
+        }
     }
 
     public void TakeDamage(int damageTaken)
@@ -32,14 +37,27 @@ public class Enemy : NetworkBehaviour, IDamageable
     {
         health.Value -= damage;
         Debug.Log("Enemy Take Damage: " + health.Value);
+
         if (health.Value <= 0)
         {
             Die();
         }
+        else
+        {
+            OnTakeDamageServerRpc?.Invoke();
+        }
     }
-
-    public void Die()
+    
+    public virtual void Die()
     {
-        
+        isAlive.Value = false;
+        Invoke(nameof(Destroy), 3f);
     }
+    
+    private void Destroy()
+    {
+        NetworkObject.Despawn();
+    }
+    
+
 }
