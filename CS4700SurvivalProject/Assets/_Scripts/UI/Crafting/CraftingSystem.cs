@@ -15,9 +15,12 @@ public class CraftingSystem : MonoBehaviour
         }
 
         if (resultSlot != null)
+        {
+            // When the result is claimed, consume ingredients
             resultSlot.OnResultTaken += ConsumeIngredients;
+        }
     }
-    
+
     private void Start()
     {
         CheckRecipe();
@@ -92,11 +95,16 @@ public class CraftingSystem : MonoBehaviour
                     slot.currentItem = null;
                     Debug.Log($"[{slot.name}] Consuming last {itemInSlot.item.name}");
                 }
+
             }
         }
+
+        // After consuming ingredients (player took the result), re-evaluate recipes once.
+        // This avoids recursive event loops while ensuring the crafting result updates
+        // immediately after a take.
+        CheckRecipe();
     }
 
-    
     // public void PrintPattern()
     // {
     //     Item[] pattern = GetItemPattern();

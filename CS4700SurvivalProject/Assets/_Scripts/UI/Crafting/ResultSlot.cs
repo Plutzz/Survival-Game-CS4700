@@ -7,8 +7,10 @@ public class ResultSlot : MonoBehaviour
     [SerializeField] private InventorySlot resultSlot;
     public GameObject InventoryItemPrefab;
     public System.Action OnResultTaken;
+    // Invoked when the result visual or stored result changes (set/cleared/claimed)
+    public System.Action OnResultUpdated;
     private InventoryItem spawnedResultItem;
-    [HideInInspector]public bool itemClaimed = false;
+    [HideInInspector] public bool itemClaimed = false;
 
     public bool ClaimResult(out InventoryItem item)
     {
@@ -22,7 +24,10 @@ public class ResultSlot : MonoBehaviour
         currentItem = null;
         spawnedResultItem = null;
         itemClaimed = true;   // Mark as claimed
+        // First notify that the result was taken so ingredients can be consumed
         OnResultTaken?.Invoke();
+        // Then notify listeners that the result slot state changed
+        OnResultUpdated?.Invoke();
         Debug.Log("Result claimed for drag, ingredients should be consumed.");
         return true;
     }
@@ -36,6 +41,8 @@ public class ResultSlot : MonoBehaviour
         SpawnNewItem(item);
         currentItem = item;
         itemClaimed = false;  // Reset when spawning a new item
+        // Notify listeners that the result slot has been updated
+        OnResultUpdated?.Invoke();
     }
 
     public void ClearResultVisual()
@@ -47,6 +54,8 @@ public class ResultSlot : MonoBehaviour
         }
 
         currentItem = null;
+        // Notify listeners that the result slot has been cleared
+        OnResultUpdated?.Invoke();
     }
 
     private void SpawnNewItem(Item item)

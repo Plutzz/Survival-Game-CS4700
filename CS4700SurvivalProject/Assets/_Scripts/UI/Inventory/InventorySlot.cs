@@ -6,7 +6,7 @@ public class InventorySlot : MonoBehaviour, IDropHandler
     public bool isResultSlot = false;
     public void OnDrop(PointerEventData eventData)
     {
-        if (isResultSlot) 
+        if (isResultSlot)
         {
             Debug.Log("Cannot drop items on a result slot.");
             return; // ignore any drops
@@ -32,35 +32,90 @@ public class InventorySlot : MonoBehaviour, IDropHandler
             }
         }
 
+        // Get InventoryManager to help find empty slots
+        InventoryManager inventoryManager = InventoryManager.Instance;
+        if (inventoryManager == null)
+        {
+            Debug.LogError("InventoryManager not found!");
+            return;
+        }
+
+        // Handle result items differently to avoid invalid swaps with result slot
+        bool isFromResultSlot = droppedItem.parentResultSlot != null;
+
         if (currentItem == null)
         {
             // Slot empty: just assign
             droppedItem.parentAfterDrag = transform;
-            droppedItem.transform.SetParent(transform);
+            droppedItem.transform.SetParent(transform, false);
             droppedItem.transform.localPosition = Vector3.zero;
+        }
+        else if (currentItem.item == droppedItem.item && currentItem.item != null && currentItem.item.stackable)
+        {
+            // Merge stacks: add count to existing and destroy the dragged UI
+            currentItem.count += droppedItem.count;
+            currentItem.RefreshCount();
+
+            // Stop drag on the source and destroy the dragged UI element (it has been merged)
+            droppedItem.StopDragging();
+            Destroy(dropped);
+        }
+        else if (isFromResultSlot)
+        {
+            // If item is from result slot and target is occupied, find an empty inventory slot
+            bool found = false;
+            foreach (InventorySlot slot in inventoryManager.inventorySlots)
+            {
+                if (slot.isResultSlot) continue; // Skip result slots
+
+                InventoryItem existingItem = null;
+                for (int i = 0; i < slot.transform.childCount; i++)
+                {
+                    existingItem = slot.transform.GetChild(i).GetComponent<InventoryItem>();
+                    if (existingItem != null) break;
+                }
+
+                if (existingItem == null)
+                {
+                    // Found empty slot - place item here
+                    droppedItem.parentAfterDrag = slot.transform;
+                    droppedItem.transform.SetParent(slot.transform, false);
+                    droppedItem.transform.localPosition = Vector3.zero;
+                    found = true;
+                    break;
+                }
+            }
+
+            if (!found)
+            {
+                // No empty slots - snap back to original position
+                Debug.Log("No empty slots available for result item");
+                if (droppedItem.parentAfterDrag != null)
+                {
+                    droppedItem.transform.SetParent(droppedItem.parentAfterDrag, false);
+                    droppedItem.transform.localPosition = Vector3.zero;
+                }
+            }
         }
         else
         {
-            // Slot occupied: swap items
-
-            // Store old parent of dropped item
+            // Normal swap for non-result items
             Transform oldParent = droppedItem.parentAfterDrag;
 
             // Put dropped item into this slot
             droppedItem.parentAfterDrag = transform;
-            droppedItem.transform.SetParent(transform);
+            droppedItem.transform.SetParent(transform, false);
             droppedItem.transform.localPosition = Vector3.zero;
 
             // Move current item to the old slot of dropped item
             if (oldParent != null)
             {
                 currentItem.parentAfterDrag = oldParent;
-                currentItem.transform.SetParent(oldParent);
+                currentItem.transform.SetParent(oldParent, false);
                 currentItem.transform.localPosition = Vector3.zero;
             }
             else
             {
-                // If dropped item didn't have a valid old parent, just leave it in place
                 Debug.LogWarning("Dropped item had no valid parent to swap with.");
             }
         }

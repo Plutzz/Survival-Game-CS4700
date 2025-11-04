@@ -18,10 +18,12 @@ public class InventoryItem : MonoBehaviour, IBeginDragHandler, IDragHandler, IEn
     [HideInInspector] public int count = 1;
     [HideInInspector] public Transform parentAfterDrag;
     public ResultSlot parentResultSlot;
-    
-    
+
+
     // Local guard so OnDrag/OnEndDrag only act when a drag was allowed to start.
     bool draggingAllowed = false;
+    // Used to perform UI raycasts when right-clicking while dragging
+    PointerEventData pointerEventData;
 
     public void InitializeItem(Item newItem)
     {
@@ -37,6 +39,13 @@ public class InventoryItem : MonoBehaviour, IBeginDragHandler, IDragHandler, IEn
         countText.text = count.ToString();
         bool textActive = count > 1;
         countText.gameObject.SetActive(textActive);
+        // If this item is inside a crafting slot, notify the slot that its contents changed
+        // so crafting recipes can be re-evaluated when stack counts change.
+        var craftingSlot = GetComponentInParent<CraftingSlot>();
+        if (craftingSlot != null)
+        {
+            craftingSlot.NotifySlotUpdated();
+        }
     }
 
     public void OnBeginDrag(PointerEventData eventData)
@@ -63,14 +72,14 @@ public class InventoryItem : MonoBehaviour, IBeginDragHandler, IDragHandler, IEn
             image.raycastTarget = false;
         Debug.Log("begin drag");
         if (parentResultSlot != null)
-{
-        InventoryItem claimedItem;
-        if (parentResultSlot.ClaimResult(out claimedItem))
         {
-            parentAfterDrag = claimedItem.transform.parent; // set parent for snapping back
-            // continue drag with the item
+            InventoryItem claimedItem;
+            if (parentResultSlot.ClaimResult(out claimedItem))
+            {
+                parentAfterDrag = claimedItem.transform.parent; // set parent for snapping back
+                                                                // continue drag with the item
+            }
         }
-    }
     }
 
     public void OnDrag(PointerEventData eventData)
@@ -81,10 +90,112 @@ public class InventoryItem : MonoBehaviour, IBeginDragHandler, IDragHandler, IEn
         Debug.Log("dragging");
     }
 
+    void Update()
+    {
+        // If we're dragging a stack, allow right-click to place a single item into a slot.
+        if (draggingAllowed && Input.GetMouseButtonDown(1))
+        {
+            TryPlaceOneAtPointer();
+        }
+    }
+
+    void TryPlaceOneAtPointer()
+    {
+        // Find the canvas / GraphicRaycaster to raycast UI elements under the cursor
+        Canvas canvas = GetComponentInParent<Canvas>();
+        if (canvas == null) return;
+        GraphicRaycaster gr = canvas.GetComponent<GraphicRaycaster>();
+        if (gr == null) return;
+        if (EventSystem.current == null) return;
+
+        pointerEventData = new PointerEventData(EventSystem.current);
+        pointerEventData.position = Input.mousePosition;
+
+        List<RaycastResult> results = new List<RaycastResult>();
+        gr.Raycast(pointerEventData, results);
+
+        foreach (var r in results)
+        {
+            if (r.gameObject == null) continue;
+            InventorySlot slot = r.gameObject.GetComponentInParent<InventorySlot>();
+            if (slot != null)
+            {
+                PlaceOneIntoSlot(slot);
+                break;
+            }
+        }
+    }
+
+    void PlaceOneIntoSlot(InventorySlot slot)
+    {
+        if (slot == null || item == null) return;
+
+        // Check if the slot already contains an InventoryItem
+        InventoryItem existing = null;
+        if (slot.transform.childCount > 0)
+        {
+            var child = slot.transform.GetChild(0);
+            if (child != null) existing = child.GetComponent<InventoryItem>();
+        }
+
+        // If slot empty, spawn a new UI item with count 1
+        if (existing == null)
+        {
+            GameObject newGO = Instantiate(gameObject);
+            // Ensure the instantiated object doesn't start dragging
+            var newItem = newGO.GetComponent<InventoryItem>();
+            if (newItem != null)
+            {
+                newItem.InitializeItem(item);
+                newItem.count = 1;
+                newItem.RefreshCount();
+                // parent into slot and ensure transform is correct
+                newGO.name = item.name + "_UI";
+                newGO.transform.SetParent(slot.transform, false);
+                newGO.transform.localPosition = Vector3.zero;
+                newGO.transform.localScale = Vector3.one;
+                // ensure it can be interacted with later
+                if (newItem.image != null) newItem.image.raycastTarget = true;
+                newItem.parentAfterDrag = slot.transform;
+                // Make sure it's not considered dragging right now
+                newItem.draggingAllowed = false;
+            }
+
+            // Decrement source stack
+            count -= 1;
+            RefreshCount();
+
+            if (count <= 0)
+            {
+                // End dragging and destroy source
+                draggingAllowed = false;
+                Destroy(gameObject);
+            }
+            return;
+        }
+
+        // If slot has same item and stackable, increment existing stack
+        if (existing.item == item && item.stackable)
+        {
+            existing.count += 1;
+            existing.RefreshCount();
+
+            count -= 1;
+            RefreshCount();
+
+            if (count <= 0)
+            {
+                draggingAllowed = false;
+                Destroy(gameObject);
+            }
+        }
+        // If slot has different item, do nothing (you can change to swap behavior if desired)
+    }
+
     public void OnEndDrag(PointerEventData eventData)
     {
         if (!draggingAllowed) return;
-            bool removedFromInventory = false;
+        bool removedFromInventory = false;
 
         if (!IsWithinInventory(eventData.position))
             removedFromInventory = DropItem();
@@ -94,7 +205,7 @@ public class InventoryItem : MonoBehaviour, IBeginDragHandler, IDragHandler, IEn
             transform.SetParent(parentAfterDrag);
             transform.localPosition = Vector3.zero; // snap back
         }
-    
+
         if (image != null)
             image.raycastTarget = true;
         Debug.Log("end drag");
@@ -113,7 +224,17 @@ public class InventoryItem : MonoBehaviour, IBeginDragHandler, IDragHandler, IEn
             image.raycastTarget = true;
         // Try to restore parent if it was left detached.
         if (parentAfterDrag != null && transform.parent != parentAfterDrag)
-            transform.SetParent(parentAfterDrag);
+        {
+            // Avoid reparenting while the parent is being activated/deactivated (Unity throws in that case)
+            if (parentAfterDrag.gameObject.activeInHierarchy)
+            {
+                transform.SetParent(parentAfterDrag);
+            }
+            else
+            {
+                // Parent inactive — skip reparent now. It will be restored when UI stabilizes (or on next valid drag).
+            }
+        }
         if (EventSystem.current != null)
             EventSystem.current.SetSelectedGameObject(null);
         draggingAllowed = false;
@@ -127,12 +248,20 @@ public class InventoryItem : MonoBehaviour, IBeginDragHandler, IDragHandler, IEn
             OnEndDrag(eventData);
     }
 
+    // Public helper to stop dragging (used when merging/destroying the dragged UI)
+    public void StopDragging()
+    {
+        draggingAllowed = false;
+        if (EventSystem.current != null)
+            EventSystem.current.SetSelectedGameObject(null);
+    }
+
     bool IsWithinInventory(Vector2 mousePosition)
     {
         if (parentAfterDrag == null) return false;
         RectTransform parentRect = parentAfterDrag.GetComponent<RectTransform>();
         if (parentRect == null) return false;
-        
+
         return RectTransformUtility.RectangleContainsScreenPoint(parentRect, mousePosition);
     }
 

@@ -7,6 +7,13 @@ public class CraftingSlot : MonoBehaviour, IDropHandler
     [HideInInspector] public InventoryItem currentItem;
     public event Action OnSlotUpdated;
 
+    // Public helper so other components (like InventoryItem) can notify that
+    // the slot's visible contents changed (for example stack count changed).
+    public void NotifySlotUpdated()
+    {
+        OnSlotUpdated?.Invoke();
+    }
+
     private void Update()
     {
         // Detect if an item was removed manually (dragged out or destroyed)
