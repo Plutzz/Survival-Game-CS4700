@@ -12,10 +12,10 @@ public class PlayerMove : State<Player>
     [SerializeField] public float ItemBobAmount;
     [SerializeField] public Transform ItemHold;
     private PlayerStats _stats => Context.Stats;
-    private PlayerInput _input => Context.PlayerInput;
+    private InputManager _input => InputManager.Instance;
     public override void UpdateState()
     {
-        Vector2 moveInput = _input.moveVector.normalized;
+        Vector2 moveInput = _input.MoveVector.normalized;
         Context.Rb.velocity = moveInput * _stats.moveSpeed;
         
         // Item Bob

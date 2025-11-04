@@ -5,18 +5,23 @@ using UnityEngine;
 
 public class UIManager : Singleton<UIManager>
 {
-    [field: Header("In Game HUD")]
-    [field: SerializeField] public GameObject InGameHUDMenu { get; private set; }
-    [field: SerializeField] public MMProgressBar HealthBar { get; private set; }
+    // [field: SerializeField] public Menu SettingsMenu { get; private set; }
     
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
-
+    [field: Header("In Game HUD")]
+    [field: SerializeField] public GameObject InGameHUD { get; private set; }
+    [field: SerializeField] public MMProgressBar HealthBar { get; private set; }
     public void SetHealthBar(int value, int maxValue)
     {
         HealthBar.UpdateBar(value, 0, maxValue);
+    }
+    
+    public void HideAllMenus()
+    {
+        InGameHUD.gameObject.SetActive(false);
+    }
+
+    public void ShowHUD(bool show)
+    {
+        InGameHUD.gameObject.SetActive(show);
     }
 }

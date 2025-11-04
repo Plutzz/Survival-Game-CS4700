@@ -8,7 +8,6 @@ using UnityEngine.Serialization;
 public class Player : NetworkBehaviour
 {
     [field:Header("Components")] 
-    [field:SerializeField] public PlayerInput PlayerInput { get; private set; }
     [field:SerializeField] public Transform Pivot { get; private set; }
     [field:SerializeField] public PlayerStats Stats { get; private set; }
     [field:SerializeField] public Rigidbody2D Rb { get; private set; }
@@ -69,21 +68,21 @@ public class Player : NetworkBehaviour
     {
         
         if ((StateMachine.CurrentState == MoveState || StateMachine.CurrentState == IdleState) &&
-            PlayerInput.attackPressedDownThisFrame)
+            InputManager.Instance.AttackReleasedThisFrame)
         {
             StateMachine.SetState(AttackState);
             // SetStateServerRpc("Attack", false);
             return;
         }
         
-        if ((StateMachine.CurrentState == IdleState || StateMachine.CurrentState.IsComplete) && PlayerInput.moveVector != Vector2.zero)
+        if ((StateMachine.CurrentState == IdleState || StateMachine.CurrentState.IsComplete) && InputManager.Instance.MoveVector != Vector2.zero)
         {
             StateMachine.SetState(MoveState);
             // SetStateServerRpc("Move", false);
             return;
         }
         
-        if ((StateMachine.CurrentState == MoveState || StateMachine.CurrentState.IsComplete) && PlayerInput.moveVector == Vector2.zero)
+        if ((StateMachine.CurrentState == MoveState || StateMachine.CurrentState.IsComplete) && InputManager.Instance.MoveVector == Vector2.zero)
         {
             StateMachine.SetState(IdleState);
             // SetStateServerRpc("Idle", false);

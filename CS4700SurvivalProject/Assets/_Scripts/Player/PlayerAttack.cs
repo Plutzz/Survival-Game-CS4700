@@ -64,7 +64,7 @@ public class PlayerAttack : State<Player>
     {
         base.UpdateState();
         
-        Vector2 moveInput = Context.PlayerInput.moveVector.normalized;
+        Vector2 moveInput = InputManager.Instance.MoveVector.normalized;
         Context.Rb.velocity = moveInput * Context.Stats.moveSpeed;
         
         if (StateUptime > AttackTime)

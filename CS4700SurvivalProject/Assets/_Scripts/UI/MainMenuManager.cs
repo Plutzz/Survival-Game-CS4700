@@ -8,7 +8,6 @@ using UnityEngine.SceneManagement;
 
 public class MainMenuManager : Singleton<MainMenuManager>
 {
-    [SerializeField] private MMF_Player loadScenePlayer;
     [SerializeField] private GameObject[] menus;
     [SerializeField] private MenuTextInput joinCodeTextInput;
     [SerializeField] private SceneField gameScene;
@@ -199,8 +198,7 @@ public class MainMenuManager : Singleton<MainMenuManager>
 
     private void LoadGameScene()
     {
-        Debug.Log(gameScene.SceneName);
-        Debug.Log(NetworkManager.Singleton.SceneManager);
         NetworkManager.Singleton.SceneManager.LoadScene(gameScene.SceneName, LoadSceneMode.Single);
+        GameManager.Instance.ChangeGameState(GameState.Gameplay);
     }
 }
