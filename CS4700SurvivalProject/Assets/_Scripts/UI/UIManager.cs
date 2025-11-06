@@ -17,7 +17,6 @@ public class UIManager : Singleton<UIManager>
     
     public void HideAllMenus()
     {
-        InGameHUD.gameObject.SetActive(false);
         InventoryMenu.gameObject.SetActive(false);
     }
 

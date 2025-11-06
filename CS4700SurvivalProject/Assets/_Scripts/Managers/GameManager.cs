@@ -13,6 +13,7 @@ public enum GameState
     Title,
     Loading,
     Gameplay,
+    Inventory,
     Dialogue,
     Paused,
     Cutscene
@@ -95,12 +96,10 @@ public class GameManager : Singleton<GameManager>
                 UIManager.Instance.ShowHUD(false);
                 InputManager.Instance.EnableUIInput();
                 InputManager.Instance.LockCursor(false);
-                // AudioManager.Instance.PlaySong(AudioManager.Songs.MenuSong);
                 break;
             case GameState.Loading:
                 Time.timeScale = 0f;
                 UIManager.Instance.ShowHUD(false);
-                // AudioManager.Instance.StopSong();
                 InputManager.Instance.DisableAllInput();
                 InputManager.Instance.LockCursor(false);
                 break;
@@ -113,10 +112,19 @@ public class GameManager : Singleton<GameManager>
                 break;
             case GameState.Dialogue:
                 Time.timeScale = 1f;
-                UIManager.Instance.ShowHUD(true);
+                UIManager.Instance.ShowHUD(false);
                 InputManager.Instance.LockCursor(false);
                 InputManager.Instance.EnableUIInput();
                 // Show dialogue panel
+                break;
+            case GameState.Inventory:
+                Time.timeScale = 1f;
+                UIManager.Instance.ShowHUD(true);
+                UIManager.Instance.OpenMenu(UIManager.Instance.InventoryMenu);
+                InputManager.Instance.LockCursor(false);
+                InputManager.Instance.EnableUIInput();
+                break;
+                
                 
                 
                 break;

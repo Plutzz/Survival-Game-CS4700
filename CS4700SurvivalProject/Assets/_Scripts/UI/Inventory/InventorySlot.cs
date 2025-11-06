@@ -11,7 +11,7 @@ public class InventorySlot : MonoBehaviour, IDropHandler
             Debug.Log("Cannot drop items on a result slot.");
             return; // ignore any drops
         }
-        if (!OpenInventory.InventoryOpen)
+        if (GameManager.Instance.CurrentGameState != GameState.Inventory)
             return;
 
         GameObject dropped = eventData.pointerDrag;

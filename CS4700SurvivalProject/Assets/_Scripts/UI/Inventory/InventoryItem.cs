@@ -51,7 +51,7 @@ public class InventoryItem : MonoBehaviour, IBeginDragHandler, IDragHandler, IEn
     public void OnBeginDrag(PointerEventData eventData)
     {
         // Only allow dragging when the inventory UI is open
-        if (!OpenInventory.InventoryOpen)
+        if (GameManager.Instance.CurrentGameState != GameState.Inventory)
         {
             draggingAllowed = false;
             return;
