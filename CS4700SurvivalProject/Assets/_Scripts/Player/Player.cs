@@ -47,7 +47,7 @@ public class Player : NetworkBehaviour
         
         HandleTransitions();
         
-        if (PauseMenuManager.Instance != null && !PauseMenuManager.Instance.isGamePaused)
+        if (GameManager.Instance.CurrentGameState != GameState.Paused)
         {
             lookDir.Value = (Camera.main.ScreenToWorldPoint(Input.mousePosition) - transform.position).normalized;
         }

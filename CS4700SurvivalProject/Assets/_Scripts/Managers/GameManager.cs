@@ -120,18 +120,16 @@ public class GameManager : Singleton<GameManager>
             case GameState.Inventory:
                 Time.timeScale = 1f;
                 UIManager.Instance.ShowHUD(true);
-                UIManager.Instance.OpenMenu(UIManager.Instance.InventoryMenu);
+                UIManager.Instance.ShowMenu(UIManager.Instance.InventoryMenu);
                 InputManager.Instance.LockCursor(false);
                 InputManager.Instance.EnableUIInput();
                 break;
-                
-                
-                
-                break;
             case GameState.Paused:
-                Time.timeScale = 0f;
+                Time.timeScale = 1f;
                 // UIManager.Instance.OpenMenu(UIManager.Instance.PauseMenu);
+                UIManager.Instance.HideAllMenus();
                 UIManager.Instance.ShowHUD(false);
+                UIManager.Instance.ShowMenu(UIManager.Instance.PauseMenu);
                 InputManager.Instance.LockCursor(false);
                 InputManager.Instance.EnableUIInput();
                 break;

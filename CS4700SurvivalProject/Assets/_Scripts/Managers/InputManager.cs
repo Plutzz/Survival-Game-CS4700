@@ -128,8 +128,19 @@ public class InputManager : Singleton<InputManager>
 
     private void OnPause(InputAction.CallbackContext context)
     {
-        if(context.performed)
-            GameManager.Instance.ChangeGameState(GameState.Paused);
+        if (context.performed)
+        {
+            if (GameManager.Instance.CurrentGameState == GameState.Paused || GameManager.Instance.CurrentGameState == GameState.Inventory)
+            {
+                GameManager.Instance.ChangeGameState(GameState.Gameplay);
+            }
+            else if(GameManager.Instance.CurrentGameState == GameState.Gameplay)
+            {
+                GameManager.Instance.ChangeGameState(GameState.Paused);
+            }
+            
+        }
+            
     }
     
     //

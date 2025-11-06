@@ -10,27 +10,16 @@ public class OpenInventory : MonoBehaviour
     [SerializeField] private GameObject cursor;
     public Transform outsideBar;
     public Transform insideBar;
-    void Start()
-    {
-        toolBar.SetActive(GameManager.Instance.CurrentGameState != GameState.Inventory);
-    }
-    // Update is called once per frame
     void Update()
     {
         if (Input.GetKeyDown(KeyCode.I))
         {
             ToggleInventory();
         }
-        if (Input.GetKeyDown(KeyCode.Escape) && mainInventory.activeSelf)
-        {
-            CloseInventory();
-        }
     }
 
     public void ToggleInventory()
     {
-        
-
         if (GameManager.Instance.CurrentGameState != GameState.Inventory)
         {
             GameManager.Instance.ChangeGameState(GameState.Inventory);
@@ -43,14 +32,6 @@ public class OpenInventory : MonoBehaviour
             MoveSlotsTo(outsideBar, insideBar);
             cursor.SetActive(false);
         }
-        
-        mainInventory.SetActive(GameManager.Instance.CurrentGameState == GameState.Inventory);
-    }
-
-    public void CloseInventory()
-    {
-        mainInventory.SetActive(false);
-        MoveSlotsTo(insideBar, outsideBar);
     }
 
     private void MoveSlotsTo(Transform newParent, Transform oldParent)

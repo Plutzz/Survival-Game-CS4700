@@ -3,10 +3,10 @@ using UnityEngine;
 
 public class Menu : MonoBehaviour
 {
-    [field: SerializeField] public List<UnityEngine.GameObject> SubMenus { get; protected set; } = new List<UnityEngine.GameObject>();
+    [field: SerializeField] public List<GameObject> SubMenus { get; protected set; } = new List<GameObject>();
 
     protected int CurrentSubMenu;
-    void Start()
+    protected virtual void Start()
     {
         if(SubMenus.Count > 0)
             ChangeSubMenu(0);
