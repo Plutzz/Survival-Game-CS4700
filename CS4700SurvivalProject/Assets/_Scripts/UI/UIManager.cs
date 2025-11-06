@@ -5,7 +5,7 @@ using UnityEngine;
 
 public class UIManager : Singleton<UIManager>
 {
-    // [field: SerializeField] public Menu SettingsMenu { get; private set; }
+    [field: SerializeField] public Menu InventoryMenu { get; private set; }
     
     [field: Header("In Game HUD")]
     [field: SerializeField] public GameObject InGameHUD { get; private set; }
@@ -18,6 +18,13 @@ public class UIManager : Singleton<UIManager>
     public void HideAllMenus()
     {
         InGameHUD.gameObject.SetActive(false);
+        InventoryMenu.gameObject.SetActive(false);
+    }
+
+    public void OpenMenu(Menu menu)
+    {
+        HideAllMenus();
+        menu.gameObject.SetActive(true);
     }
 
     public void ShowHUD(bool show)

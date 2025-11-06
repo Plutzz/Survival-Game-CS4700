@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class InventoryManager : SingletonPersistent<InventoryManager>
+public class InventoryManager : Singleton<InventoryManager>
 {
     private ItemDictionary itemDictionary; //for later
     public int maxStackedItems = 4;
