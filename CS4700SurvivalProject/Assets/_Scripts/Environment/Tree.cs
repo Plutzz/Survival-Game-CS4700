@@ -16,6 +16,8 @@ public class Tree : NetworkBehaviour, IDamageable
     [SerializeField] private Collider2D collider;
     [SerializeField] private ParticleSystem deathParticles;
     [SerializeField] private AudioSource deathAudio;
+    [SerializeField] private GameObject ItemToPickupPrefab;
+    [SerializeField] private Item ItemDefinition;
 
 
     public override void OnNetworkSpawn()
@@ -56,6 +58,12 @@ public class Tree : NetworkBehaviour, IDamageable
     public void Die()
     {
         PlayDeathFeedbacksClientRpc();
+        
+        GameObject spawnedItem = Instantiate(ItemToPickupPrefab, transform.position, Quaternion.identity);
+        spawnedItem.GetComponent<ItemPickup>().itemDefinition = ItemDefinition;
+        spawnedItem.GetComponent<ItemPickup>().ApplyDefinition();
+        spawnedItem.GetComponent<NetworkObject>().Spawn(true);
+        
         isAlive.Value = false;
         Invoke(nameof(Destroy), 3f);
     }

@@ -299,6 +299,8 @@ MonoBehaviour:
   collider: {fileID: 7274265258622161581}
   deathParticles: {fileID: 8466303224538611689}
   deathAudio: {fileID: 3228600845654136923}
+  ItemToPickupPrefab: {fileID: 449895116576873272, guid: 6d577c508866d4c4483a2faf74f3da89, type: 3}
+  ItemDefinition: {fileID: 11400000, guid: 61f1572cc2e21fc41947e720fbd2e1e6, type: 2}
 --- !u!1 &6555000919745083061
 GameObject:
   m_ObjectHideFlags: 0

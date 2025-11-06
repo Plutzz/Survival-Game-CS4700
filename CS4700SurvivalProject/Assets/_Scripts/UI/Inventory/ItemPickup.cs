@@ -9,6 +9,8 @@ public class ItemPickup : NetworkBehaviour
     public string instanceId;
     public int count = 1;
     SpriteRenderer spriteRenderer;
+    [SerializeField] private float timeBeforePickup = 0.5f;
+    private float timer;
 
     void Awake()
     {
@@ -20,6 +22,11 @@ public class ItemPickup : NetworkBehaviour
             ApplyDefinition();
     }
 
+    void Update()
+    {
+        timer += Time.deltaTime;
+    }
+
     public void Initialize(Item newItem, int newCount = 1)
     {
         itemDefinition = newItem;
@@ -27,18 +34,17 @@ public class ItemPickup : NetworkBehaviour
         ApplyDefinition(); 
     }
 
-    private void OnTriggerEnter2D(Collider2D collision)
+    private void OnTriggerStay2D(Collider2D collision)
     {
         if (collision.CompareTag("Player"))
         {
-            Debug.Log("Player touched " + itemDefinition.name);
             AttemptPickup();
         }
     }
 
     public bool AttemptPickup()
     {
-        if (itemDefinition == null)
+        if (itemDefinition == null || timer < timeBeforePickup)
             return false;
 
         // Local / single-player behaviour: use InventoryManager
