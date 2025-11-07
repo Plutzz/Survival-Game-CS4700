@@ -60,6 +60,7 @@ public class ResultSlot : MonoBehaviour
 
     private void SpawnNewItem(Item item)
     {
+        
         if (item == null || InventoryItemPrefab == null) return;
 
         GameObject newItemGo = Instantiate(InventoryItemPrefab, resultSlot.transform);

@@ -37,10 +37,12 @@ public class CraftingSystem : MonoBehaviour
     private void CheckRecipe()
     {
         Item[] currentPattern = GetItemPattern();
+        PrintPattern();
 
         foreach (var recipe in recipes)
         {
             if (recipe == null) continue;
+            Debug.Log("Checking recipe for: " + recipe.resultItem.name);
             bool match = true;
 
             for (int i = 0; i < currentPattern.Length; i++)
@@ -48,6 +50,7 @@ public class CraftingSystem : MonoBehaviour
                 if (recipe.requiredPattern[i] != currentPattern[i])
                 {
                     match = false;
+                    Debug.Log("Pattern mismatch at index " + i);
                     break;
                 }
             }
@@ -105,20 +108,20 @@ public class CraftingSystem : MonoBehaviour
         CheckRecipe();
     }
 
-    // public void PrintPattern()
-    // {
-    //     Item[] pattern = GetItemPattern();
+    public void PrintPattern()
+    {
+        Item[] pattern = GetItemPattern();
 
-    //     StringBuilder sb = new StringBuilder("Crafting Pattern: [");
-    //     for (int i = 0; i < pattern.Length; i++)
-    //     {
-    //         string name = pattern[i] ? pattern[i].name : "Empty";
-    //         sb.Append(name);
-    //         if (i < pattern.Length - 1)
-    //             sb.Append(", ");
-    //     }
-    //     sb.Append("]");
+        StringBuilder sb = new StringBuilder("Crafting Pattern: [");
+        for (int i = 0; i < pattern.Length; i++)
+        {
+            string name = pattern[i] ? pattern[i].name : "Empty";
+            sb.Append(name);
+            if (i < pattern.Length - 1)
+                sb.Append(", ");
+        }
+        sb.Append("]");
 
-    //     Debug.Log(sb.ToString());
-    // }
+        Debug.Log(sb.ToString());
+    }
 }
