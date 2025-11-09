@@ -2,12 +2,13 @@ using System.Collections;
 using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 public class OpenInventory : MonoBehaviour
 {
     [SerializeField] GameObject mainInventory;
     [SerializeField] GameObject toolBar;
-    [SerializeField] private GameObject cursor;
+    [FormerlySerializedAs("cursor")] [SerializeField] private GameObject hotbarCursor;
     public Transform outsideBar;
     public Transform insideBar;
     void Update()
@@ -24,13 +25,13 @@ public class OpenInventory : MonoBehaviour
         {
             GameManager.Instance.ChangeGameState(GameState.Inventory);
             MoveSlotsTo(insideBar, outsideBar);
-            cursor.SetActive(true);
+            hotbarCursor.SetActive(false);
         }
         else
         {
             GameManager.Instance.ChangeGameState(GameState.Gameplay);
             MoveSlotsTo(outsideBar, insideBar);
-            cursor.SetActive(false);
+            hotbarCursor.SetActive(true);
         }
     }
 

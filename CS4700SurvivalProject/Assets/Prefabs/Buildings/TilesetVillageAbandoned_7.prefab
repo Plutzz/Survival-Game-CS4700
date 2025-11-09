@@ -10,7 +10,6 @@ GameObject:
   m_Component:
   - component: {fileID: 5721491510332200405}
   - component: {fileID: 6052672660210201376}
-  - component: {fileID: 5187443361474158533}
   m_Layer: 0
   m_Name: TilesetVillageAbandoned_7
   m_TagString: Untagged
@@ -80,20 +79,6 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 4, y: 2.99}
   m_EdgeRadius: 0
---- !u!114 &5187443361474158533
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1687645556246028139}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: fd33a3d91e8c9ff49a56b2f31165b81e, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  maxHealth: 1000
-  _mmfPlayer: {fileID: 4698077661371826017}
 --- !u!1 &4407131724790985222
 GameObject:
   m_ObjectHideFlags: 0
@@ -344,14 +329,3 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 7782024950065685409, guid: 1c02ce109df064d4dacc9340904c488d, type: 3}
   m_PrefabInstance: {fileID: 8155801228709053919}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &4698077661371826017 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 3467163392205535934, guid: 1c02ce109df064d4dacc9340904c488d, type: 3}
-  m_PrefabInstance: {fileID: 8155801228709053919}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6da43522623d4704e979466dc7650b65, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 

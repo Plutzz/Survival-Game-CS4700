@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 public class InventoryManager : Singleton<InventoryManager>
 {
@@ -10,7 +11,7 @@ public class InventoryManager : Singleton<InventoryManager>
     public GameObject InventoryItemPrefab;
     [SerializeField] private InventoryCursorAnimation cursor;
     [SerializeField] private Transform inventorySlotsParent;
-    [SerializeField] private Transform[] inventorySlotsTransform;
+    [FormerlySerializedAs("inventorySlotsTransform")] [SerializeField] private Transform[] hotbarSlots;
 
     int selectedSlot = -1;
 
@@ -24,7 +25,7 @@ public class InventoryManager : Singleton<InventoryManager>
         if (Input.inputString != null)
         {
             bool isNumber = int.TryParse(Input.inputString, out int number);
-            if (isNumber && number > 0 && number < 8)
+            if (isNumber && number > 0 && number <= hotbarSlots.Length)
             {
                 ChangeSelectedSlot(number - 1);
             }
@@ -42,14 +43,14 @@ public class InventoryManager : Singleton<InventoryManager>
             {
                 newValue = 0;
             }
-            ChangeSelectedSlot(newValue % 7);
+            ChangeSelectedSlot(newValue % hotbarSlots.Length);
         }
     }
 
     void ChangeSelectedSlot(int newValue)
     {
         // Debug.Log("Change to slot " + newValue);   
-        cursor.MoveToPosition(inventorySlotsTransform[newValue]);
+        cursor.MoveToPosition(hotbarSlots[newValue]);
         selectedSlot = newValue;
     }
 
