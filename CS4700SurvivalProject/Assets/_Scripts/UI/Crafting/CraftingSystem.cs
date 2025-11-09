@@ -4,7 +4,7 @@ using System.Text;
 public class CraftingSystem : MonoBehaviour
 {
     [SerializeField] private CraftingSlot[] slots = new CraftingSlot[8];
-    [SerializeField] private CraftingRecipe[] recipes;
+    [SerializeField] private CraftingRecipeSO[] recipes;
     [SerializeField] private ResultSlot resultSlot;
     private void Awake()
     {
@@ -26,9 +26,9 @@ public class CraftingSystem : MonoBehaviour
         CheckRecipe();
     }
 
-    public Item[] GetItemPattern()
+    public ItemSO[] GetItemPattern()
     {
-        Item[] pattern = new Item[slots.Length];
+        ItemSO[] pattern = new ItemSO[slots.Length];
         for (int i = 0; i < slots.Length; i++)
             pattern[i] = slots[i].GetItem();
         return pattern;
@@ -36,7 +36,7 @@ public class CraftingSystem : MonoBehaviour
     int count = 0;
     private void CheckRecipe()
     {
-        Item[] currentPattern = GetItemPattern();
+        ItemSO[] currentPattern = GetItemPattern();
         PrintPattern();
 
         foreach (var recipe in recipes)
@@ -110,7 +110,7 @@ public class CraftingSystem : MonoBehaviour
 
     public void PrintPattern()
     {
-        Item[] pattern = GetItemPattern();
+        ItemSO[] pattern = GetItemPattern();
 
         StringBuilder sb = new StringBuilder("Crafting Pattern: [");
         for (int i = 0; i < pattern.Length; i++)

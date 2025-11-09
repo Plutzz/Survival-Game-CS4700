@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -11,8 +12,11 @@ public class InventoryManager : Singleton<InventoryManager>
     public GameObject InventoryItemPrefab;
     [SerializeField] private InventoryCursorAnimation cursor;
     [SerializeField] private Transform inventorySlotsParent;
-    [FormerlySerializedAs("inventorySlotsTransform")] [SerializeField] private Transform[] hotbarSlots;
-
+    [SerializeField] private InventorySlot[] hotbarSlots;
+    [field: SerializeField] public ItemSO heldItem { get; private set; }
+    
+    public Action OnHeldItemChanged;
+    
     int selectedSlot = -1;
 
     private void Start()
@@ -50,11 +54,24 @@ public class InventoryManager : Singleton<InventoryManager>
     void ChangeSelectedSlot(int newValue)
     {
         // Debug.Log("Change to slot " + newValue);   
-        cursor.MoveToPosition(hotbarSlots[newValue]);
+        cursor.MoveToPosition(hotbarSlots[newValue].transform);
+        InventoryItem inventoryItem = hotbarSlots[newValue].GetComponentInChildren<InventoryItem>();
+        
+        if (inventoryItem != null)
+        {
+            heldItem = inventoryItem.item;
+        }
+        else
+        {
+            heldItem = null;
+        }
+        
+        OnHeldItemChanged?.Invoke();
+        
         selectedSlot = newValue;
     }
 
-    public bool AddItem(Item item)
+    public bool AddItem(ItemSO item)
     {
         //Check if any slot has the same item with count lower than max
         for (int i = 0; i < inventorySlots.Length; i++)
@@ -84,20 +101,20 @@ public class InventoryManager : Singleton<InventoryManager>
         }
         return false;
     }
-    void SpawnNewItem(Item item, InventorySlot slot)
+    void SpawnNewItem(ItemSO item, InventorySlot slot)
     {
         GameObject newItemGo = Instantiate(InventoryItemPrefab, slot.transform);
         InventoryItem inventoryItem = newItemGo.GetComponent<InventoryItem>();
         inventoryItem.InitializeItem(item);
     }
 
-    public Item GetSelectedItem(bool use)
+    public ItemSO GetSelectedItem(bool use)
     {
         InventorySlot slot = inventorySlots[selectedSlot];
         InventoryItem itemInSlot = slot.GetComponentInChildren<InventoryItem>();
         if (itemInSlot != null)
         {
-            Item item = itemInSlot.item;
+            ItemSO item = itemInSlot.item;
             if (use)
             {
                 itemInSlot.count--;

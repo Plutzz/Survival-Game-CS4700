@@ -59,7 +59,7 @@ public class CraftingSlot : MonoBehaviour, IDropHandler
         OnSlotUpdated?.Invoke();
     }
 
-    public Item GetItem()
+    public ItemSO GetItem()
     {
         return currentItem != null ? currentItem.item : null;
     }

@@ -1,10 +1,11 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Serialization;
 using UnityEngine.Tilemaps;
 
 [CreateAssetMenu(menuName = "Scriptable Object/Item")]
-public class Item : ScriptableObject
+public class ItemSO : ScriptableObject
 {
     public int ID;
     public TileBase tile;
@@ -15,8 +16,11 @@ public class Item : ScriptableObject
     [Header("Only UI")]
     public bool stackable = true;
 
-    [Header("Both")]
-    public Sprite image;
+    [FormerlySerializedAs("image")] [Header("Sprites")]
+    public Sprite worldSprite;
+    public float worldScale = 1f;
+    public Sprite heldSprite;
+    public float heldScale = 1f;
 }
 
 public enum ItemType

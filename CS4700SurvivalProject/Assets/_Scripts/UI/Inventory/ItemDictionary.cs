@@ -4,12 +4,12 @@ using UnityEngine;
 
 public class ItemDictionary : MonoBehaviour
 {
-    public List<Item> itemPrefabs;
-    private Dictionary<int, Item> itemDictionary;
+    public List<ItemSO> itemPrefabs;
+    private Dictionary<int, ItemSO> itemDictionary;
 
     private void Awake()
     {
-        itemDictionary = new Dictionary<int, Item>();
+        itemDictionary = new Dictionary<int, ItemSO>();
 
         // Auto Increment IDs
         for (int i = 0; i < itemPrefabs.Count; i++)
@@ -19,15 +19,15 @@ public class ItemDictionary : MonoBehaviour
                 itemPrefabs[i].ID = i + 1;
             }
         }
-        foreach (Item item in itemPrefabs)
+        foreach (ItemSO item in itemPrefabs)
         {
             itemDictionary[item.ID] = item;
         }
     }
 
-    public Item GetItemPrefab(int itemID)
+    public ItemSO GetItemPrefab(int itemID)
     {
-        itemDictionary.TryGetValue(itemID, out Item prefab);
+        itemDictionary.TryGetValue(itemID, out ItemSO prefab);
         if (prefab == null)
         {
             Debug.LogWarning($"Item with ID {itemID} not found in dictionary");

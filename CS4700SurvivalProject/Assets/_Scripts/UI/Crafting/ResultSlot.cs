@@ -3,7 +3,7 @@ using UnityEngine.UI;
 
 public class ResultSlot : MonoBehaviour
 {
-    [HideInInspector] public Item currentItem;
+    [HideInInspector] public ItemSO currentItem;
     [SerializeField] private InventorySlot resultSlot;
     public GameObject InventoryItemPrefab;
     public System.Action OnResultTaken;
@@ -32,7 +32,7 @@ public class ResultSlot : MonoBehaviour
         return true;
     }
 
-    public void SetItem(Item item)
+    public void SetItem(ItemSO item)
     {
         // Don't recreate the same item if it's already claimed
         if ((currentItem == item && spawnedResultItem != null) || itemClaimed)
@@ -58,7 +58,7 @@ public class ResultSlot : MonoBehaviour
         OnResultUpdated?.Invoke();
     }
 
-    private void SpawnNewItem(Item item)
+    private void SpawnNewItem(ItemSO item)
     {
         
         if (item == null || InventoryItemPrefab == null) return;

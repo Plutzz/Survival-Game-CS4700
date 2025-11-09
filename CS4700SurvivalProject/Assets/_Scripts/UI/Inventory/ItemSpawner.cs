@@ -6,10 +6,10 @@ public class ItemSpawner : MonoBehaviour
 {
     public GameObject itemPickupPrefab;
     [Tooltip("Optional list of Item definitions you can pick from in the Button inspector")]
-    public Item[] items;
+    public ItemSO[] items;
 
     // Spawn at a world position
-    public GameObject SpawnItem(Item itemDef, Vector3 worldPosition, int count = 1)
+    public GameObject SpawnItem(ItemSO itemDef, Vector3 worldPosition, int count = 1)
     {
         if (itemPickupPrefab == null || itemDef == null) return null;
 
@@ -19,16 +19,13 @@ public class ItemSpawner : MonoBehaviour
         {
             pickup.itemDefinition = itemDef;
             pickup.count = count;
-            // Ensure a unique instance id
-            if (string.IsNullOrEmpty(pickup.instanceId))
-                pickup.instanceId = System.Guid.NewGuid().ToString();
             // Apply visuals from the definition (sprite etc)
-            pickup.ApplyDefinition();
+            pickup.ApplyDefinition(itemDef);
         }
         return go;
     }
 
-    public GameObject SpawnItemAtSelf(Item itemDef, int count = 1)
+    public GameObject SpawnItemAtSelf(ItemSO itemDef, int count = 1)
     {
         return SpawnItem(itemDef, transform.position, count);
     }

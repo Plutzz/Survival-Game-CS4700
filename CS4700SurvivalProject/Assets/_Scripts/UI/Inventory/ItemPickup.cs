@@ -1,25 +1,23 @@
 using System.Collections;
 using System.Collections.Generic;
 using Unity.Netcode;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class ItemPickup : NetworkBehaviour
 {
-    public Item itemDefinition; // Assign the ScriptableObject
-    public string instanceId;
+    public ItemSO itemDefinition; // Assign the ScriptableObject
     public int count = 1;
     SpriteRenderer spriteRenderer;
-    [SerializeField] private float timeBeforePickup = 0.5f;
+    private float timeBeforePickup = 0.25f;
     private float timer;
 
     void Awake()
     {
-        if (string.IsNullOrEmpty(instanceId))
-            instanceId = System.Guid.NewGuid().ToString();
         spriteRenderer = GetComponent<SpriteRenderer>();
         // If the definition was pre-assigned on the prefab, apply its sprite.
         if (itemDefinition != null)
-            ApplyDefinition();
+            ApplyDefinition(itemDefinition);
     }
 
     void Update()
@@ -27,11 +25,11 @@ public class ItemPickup : NetworkBehaviour
         timer += Time.deltaTime;
     }
 
-    public void Initialize(Item newItem, int newCount = 1)
+    public void Initialize(ItemSO newItem, int newCount = 1)
     {
         itemDefinition = newItem;
         count = newCount;
-        ApplyDefinition(); 
+        ApplyDefinition(itemDefinition); 
     }
 
     private void OnTriggerStay2D(Collider2D collision)
@@ -60,12 +58,13 @@ public class ItemPickup : NetworkBehaviour
         return false;
     }
     // Call this after assigning itemDefinition at runtime to update visuals.
-    public void ApplyDefinition()
+    public void ApplyDefinition(ItemSO newDefinition)
     {
-        if (spriteRenderer == null) spriteRenderer = GetComponent<SpriteRenderer>();
-        if (spriteRenderer != null && itemDefinition != null)
+        itemDefinition = newDefinition;
+        if (itemDefinition != null)
         {
-            spriteRenderer.sprite = itemDefinition.image;
+            spriteRenderer.sprite = itemDefinition.worldSprite;
+            spriteRenderer.transform.localScale = itemDefinition.worldScale * Vector3.one;
         }
     }
 }

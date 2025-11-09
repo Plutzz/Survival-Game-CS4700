@@ -12,6 +12,39 @@ public class ItemHold : NetworkBehaviour
     [SerializeField] private DynamicYSort playerYSort;
     [FormerlySerializedAs("itemSprite")] [SerializeField] private SpriteRenderer itemSpriteRenderer;
     private ItemHoldPosition currentPosition;
+
+    private void OnEnable()
+    {
+        InventoryManager.Instance.OnHeldItemChanged += ChangeItem;
+    }
+
+    private void OnDisable()
+    {
+        InventoryManager.Instance.OnHeldItemChanged -= ChangeItem;
+    }
+
+    private void ChangeItem()
+    {
+        if (InventoryManager.Instance.heldItem == null)
+        {
+            itemSpriteRenderer.sprite = null;
+        }
+        else if (InventoryManager.Instance.heldItem.heldSprite != null)
+        {
+            itemSpriteRenderer.sprite = InventoryManager.Instance.heldItem.heldSprite;
+            itemSpriteRenderer.transform.localScale = Vector3.one * InventoryManager.Instance.heldItem.heldScale;
+        }
+        else if(InventoryManager.Instance.heldItem.worldSprite != null)
+        {
+            itemSpriteRenderer.sprite = InventoryManager.Instance.heldItem.worldSprite;
+            itemSpriteRenderer.transform.localScale = Vector3.one * InventoryManager.Instance.heldItem.heldScale;
+        }
+        else
+        {
+            Debug.LogError("Held item has no sprite");
+        }
+        
+    }
     private void Update()
     {
         if (IsOwner && player.StateMachine.CurrentState is PlayerAttack) return;

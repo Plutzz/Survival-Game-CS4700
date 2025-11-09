@@ -14,7 +14,7 @@ public class InventoryItem : MonoBehaviour, IBeginDragHandler, IDragHandler, IEn
     public Image image;
     public Text countText;
     public GameObject itemDropPrefab;
-    [HideInInspector] public Item item;
+    [HideInInspector] public ItemSO item;
     [HideInInspector] public int count = 1;
     [HideInInspector] public Transform parentAfterDrag;
     public ResultSlot parentResultSlot;
@@ -25,11 +25,11 @@ public class InventoryItem : MonoBehaviour, IBeginDragHandler, IDragHandler, IEn
     // Used to perform UI raycasts when right-clicking while dragging
     PointerEventData pointerEventData;
 
-    public void InitializeItem(Item newItem)
+    public void InitializeItem(ItemSO newItem)
     {
         item = newItem;
         if (image != null && newItem != null)
-            image.sprite = newItem.image;
+            image.sprite = newItem.worldSprite;
         RefreshCount();
     }
 
