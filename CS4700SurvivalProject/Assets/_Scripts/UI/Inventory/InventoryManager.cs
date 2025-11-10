@@ -16,6 +16,7 @@ public class InventoryManager : Singleton<InventoryManager>
     [field: SerializeField] public ItemSO heldItem { get; private set; }
     
     public Action OnHeldItemChanged;
+    public Action<ItemSO> OnItemAdded;
     
     int selectedSlot = -1;
 
@@ -85,6 +86,7 @@ public class InventoryManager : Singleton<InventoryManager>
             {
                 itemInSlot.count++;
                 itemInSlot.RefreshCount();
+                OnItemAdded?.Invoke(item);
                 return true;
             }
         }
@@ -96,6 +98,7 @@ public class InventoryManager : Singleton<InventoryManager>
             if (itemInSlot == null)
             {
                 SpawnNewItem(item, slot);
+                OnItemAdded?.Invoke(item);
                 return true;
             }
         }

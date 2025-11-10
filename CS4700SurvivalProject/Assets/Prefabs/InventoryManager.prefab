@@ -53,6 +53,52 @@ MonoBehaviour:
     tabIcon: {fileID: 0}
   selectedTabColor: {r: 1, g: 1, b: 1, a: 1}
   notSelectedTabColor: {r: 0.5377358, g: 0.53012633, b: 0.53012633, a: 1}
+--- !u!1 &4989280075829456453
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 62994649297592452}
+  - component: {fileID: 1184437530115948134}
+  m_Layer: 0
+  m_Name: ItemPopupHandler
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &62994649297592452
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4989280075829456453}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: -756.42365, y: -330.56824, z: 3.4929168}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 5437116186290207177}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1184437530115948134
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4989280075829456453}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d911b90f102194e40823a8583c115104, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  itemPopup: {fileID: 4514178671823363313, guid: 141175a6f2824a8499abbec9ac6e3d72, type: 3}
+  itemPopupParent: {fileID: 0}
 --- !u!1 &6146077655407355827
 GameObject:
   m_ObjectHideFlags: 0
@@ -85,6 +131,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 1325240532167976346}
+  - {fileID: 62994649297592452}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &5266453795972414909
@@ -132,14 +179,14 @@ MonoBehaviour:
   InventoryItemPrefab: {fileID: 8967095926367511670, guid: 4c383e7779c2f244ba1813e5a149a3fa, type: 3}
   cursor: {fileID: 0}
   inventorySlotsParent: {fileID: 0}
-  inventorySlotsTransform:
+  hotbarSlots:
   - {fileID: 0}
   - {fileID: 0}
   - {fileID: 0}
   - {fileID: 0}
   - {fileID: 0}
   - {fileID: 0}
-  - {fileID: 0}
+  <heldItem>k__BackingField: {fileID: 0}
 --- !u!114 &8775340096360492883
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -154,6 +201,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   mainInventory: {fileID: 0}
   toolBar: {fileID: 0}
-  cursor: {fileID: 0}
+  hotbarCursor: {fileID: 0}
   outsideBar: {fileID: 0}
   insideBar: {fileID: 0}
