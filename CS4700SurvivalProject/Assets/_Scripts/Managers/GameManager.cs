@@ -119,7 +119,7 @@ public class GameManager : Singleton<GameManager>
                 break;
             case GameState.Inventory:
                 Time.timeScale = 1f;
-                UIManager.Instance.ShowHUD(true);
+                UIManager.Instance.ShowHUD(false);
                 UIManager.Instance.ShowMenu(UIManager.Instance.InventoryMenu);
                 InputManager.Instance.LockCursor(false);
                 InputManager.Instance.EnableUIInput();
