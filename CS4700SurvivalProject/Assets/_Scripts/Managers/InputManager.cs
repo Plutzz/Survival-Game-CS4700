@@ -85,6 +85,7 @@ public class InputManager : Singleton<InputManager>
     private void SetCallbacks()
     {
         playerActionMap.FindAction("Pause").performed += OnPause;
+        uiActionMap.FindAction("Unpause").performed += OnUnpause;
     }
     
     private void OnEnable()
@@ -130,17 +131,18 @@ public class InputManager : Singleton<InputManager>
     {
         if (context.performed)
         {
-            if (GameManager.Instance.CurrentGameState == GameState.Paused || GameManager.Instance.CurrentGameState == GameState.Inventory)
-            {
-                GameManager.Instance.ChangeGameState(GameState.Gameplay);
-            }
-            else if(GameManager.Instance.CurrentGameState == GameState.Gameplay)
-            {
-                GameManager.Instance.ChangeGameState(GameState.Paused);
-            }
+            GameManager.Instance.ChangeGameState(GameState.Paused);
             
         }
             
+    }
+
+    private void OnUnpause(InputAction.CallbackContext context)
+    {
+        if (context.performed)
+        {
+            GameManager.Instance.ChangeGameState(GameState.Gameplay);
+        }
     }
     
     //

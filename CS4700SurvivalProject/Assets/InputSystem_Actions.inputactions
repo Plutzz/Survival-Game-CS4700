@@ -1,5 +1,4 @@
 {
-    "version": 1,
     "name": "InputSystem_Actions",
     "maps": [
         {
@@ -600,6 +599,15 @@
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": false
+                },
+                {
+                    "name": "Unpause",
+                    "type": "Button",
+                    "id": "29e2d46b-9eda-4560-b62d-c7a17c61dd9d",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
                 }
             ],
             "bindings": [
@@ -1018,6 +1026,17 @@
                     "processors": "",
                     "groups": "XR",
                     "action": "TrackedDeviceOrientation",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "fa341310-b894-4b35-9dcc-36ba52897172",
+                    "path": "<Keyboard>/escape",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": ";Keyboard&Mouse",
+                    "action": "Unpause",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }
