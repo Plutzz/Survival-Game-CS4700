@@ -12,6 +12,7 @@ public class ItemSO : ScriptableObject
     public ItemType type;
     public ActionType actionType;
     public Vector2Int range = new Vector2Int(5, 4);
+    public List<ScriptableObject> effects;
 
     [Header("Only UI")]
     public bool stackable = true;
@@ -26,7 +27,8 @@ public class ItemSO : ScriptableObject
 public enum ItemType
 {
     BuildingBlock,
-    Tool
+    Tool,
+    Consumable
 }
 
 public enum ActionType

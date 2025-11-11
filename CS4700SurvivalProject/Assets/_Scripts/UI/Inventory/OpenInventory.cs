@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using Unity.VisualScripting;
@@ -11,6 +12,12 @@ public class OpenInventory : MonoBehaviour
     [FormerlySerializedAs("cursor")] [SerializeField] private GameObject hotbarCursor;
     public Transform outsideBar;
     public Transform insideBar;
+
+    private void Start()
+    {
+        GameManager.Instance.OnGameStateChanged += MoveSlots;
+    }
+
     void Update()
     {
         if (Input.GetKeyDown(KeyCode.I))
@@ -19,19 +26,29 @@ public class OpenInventory : MonoBehaviour
         }
     }
 
-    public void ToggleInventory()
+    void MoveSlots(GameState gameState)
     {
-        if (GameManager.Instance.CurrentGameState != GameState.Inventory)
+        if (gameState == GameState.Inventory)
         {
-            GameManager.Instance.ChangeGameState(GameState.Inventory);
             MoveSlotsTo(insideBar, outsideBar);
             hotbarCursor.SetActive(false);
         }
         else
         {
-            GameManager.Instance.ChangeGameState(GameState.Gameplay);
             MoveSlotsTo(outsideBar, insideBar);
             hotbarCursor.SetActive(true);
+        }
+    }
+
+    public void ToggleInventory()
+    {
+        if (GameManager.Instance.CurrentGameState != GameState.Inventory)
+        {
+            GameManager.Instance.ChangeGameState(GameState.Inventory);
+        }
+        else
+        {
+            GameManager.Instance.ChangeGameState(GameState.Gameplay);
         }
     }
 

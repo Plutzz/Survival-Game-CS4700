@@ -14,9 +14,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   ID: 0
   tile: {fileID: 0}
-  type: 0
+  type: 2
   actionType: 0
   range: {x: 5, y: 4}
+  effects:
+  - {fileID: 11400000, guid: f0da3bcf9f5cd4e44b31479e01dc69e0, type: 2}
   stackable: 1
   worldSprite: {fileID: 21300000, guid: f8fa46f67dceb4349b403aa4057438af, type: 3}
   worldScale: 1

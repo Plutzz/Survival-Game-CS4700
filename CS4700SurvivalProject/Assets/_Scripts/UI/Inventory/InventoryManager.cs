@@ -13,7 +13,7 @@ public class InventoryManager : Singleton<InventoryManager>
     [SerializeField] private InventoryCursorAnimation cursor;
     [SerializeField] private Transform inventorySlotsParent;
     [SerializeField] private InventorySlot[] hotbarSlots;
-    [field: SerializeField] public ItemSO heldItem { get; private set; }
+    [field: SerializeField] public InventoryItem heldItem { get; private set; }
     
     public Action OnHeldItemChanged;
     public Action<ItemSO> OnItemAdded;
@@ -54,22 +54,19 @@ public class InventoryManager : Singleton<InventoryManager>
 
     void ChangeSelectedSlot(int newValue)
     {
-        // Debug.Log("Change to slot " + newValue);   
+        
         cursor.MoveToPosition(hotbarSlots[newValue].transform);
         InventoryItem inventoryItem = hotbarSlots[newValue].GetComponentInChildren<InventoryItem>();
-        
-        if (inventoryItem != null)
-        {
-            heldItem = inventoryItem.item;
-        }
-        else
-        {
-            heldItem = null;
-        }
-        
-        OnHeldItemChanged?.Invoke();
-        
+        Debug.Log("Holding new item: " + inventoryItem);   
+        heldItem = inventoryItem;
         selectedSlot = newValue;
+        OnHeldItemChanged?.Invoke();
+    }
+
+    public void RemoveSelectedItem()
+    {
+        RemoveItem(hotbarSlots[selectedSlot]);
+        ChangeSelectedSlot(selectedSlot);
     }
 
     public bool AddItem(ItemSO item)
@@ -103,6 +100,24 @@ public class InventoryManager : Singleton<InventoryManager>
             }
         }
         return false;
+    }
+
+    public void RemoveItem(InventorySlot slot, int amountToRemove = 1)
+    {
+        InventoryItem itemInSlot = slot.GetComponentInChildren<InventoryItem>();
+        if (itemInSlot != null)
+        {
+            Debug.Log($"Removing {amountToRemove} from item: {itemInSlot.item} with count: {itemInSlot.count}");
+            itemInSlot.count -= amountToRemove;
+            if (itemInSlot.count <= 0)
+            {
+                Destroy(itemInSlot.gameObject);
+            }
+            else
+            {
+                itemInSlot.RefreshCount();
+            }
+        }
     }
     void SpawnNewItem(ItemSO item, InventorySlot slot)
     {
