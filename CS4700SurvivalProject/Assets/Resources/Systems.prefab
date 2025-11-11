@@ -7975,115 +7975,143 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 3926961213622810646}
     - target: {fileID: 5266453795972414909, guid: 82242938cb719494cb9b13a963af094c, type: 3}
+      propertyPath: inventorySlots.Array.size
+      value: 34
+      objectReference: {fileID: 0}
+    - target: {fileID: 5266453795972414909, guid: 82242938cb719494cb9b13a963af094c, type: 3}
       propertyPath: inventorySlots.Array.data[0]
       value: 
-      objectReference: {fileID: 3929988849875362934}
+      objectReference: {fileID: 6166166991233919853}
     - target: {fileID: 5266453795972414909, guid: 82242938cb719494cb9b13a963af094c, type: 3}
       propertyPath: inventorySlots.Array.data[1]
       value: 
-      objectReference: {fileID: 8862258072748433606}
+      objectReference: {fileID: 4877701218856757310}
     - target: {fileID: 5266453795972414909, guid: 82242938cb719494cb9b13a963af094c, type: 3}
       propertyPath: inventorySlots.Array.data[2]
       value: 
-      objectReference: {fileID: 5459898455485741484}
+      objectReference: {fileID: 1763801302596420521}
     - target: {fileID: 5266453795972414909, guid: 82242938cb719494cb9b13a963af094c, type: 3}
       propertyPath: inventorySlots.Array.data[3]
       value: 
-      objectReference: {fileID: 6642141128053104120}
+      objectReference: {fileID: 3145144209218311900}
     - target: {fileID: 5266453795972414909, guid: 82242938cb719494cb9b13a963af094c, type: 3}
       propertyPath: inventorySlots.Array.data[4]
       value: 
-      objectReference: {fileID: 1708004318627534370}
+      objectReference: {fileID: 1207322077600667027}
     - target: {fileID: 5266453795972414909, guid: 82242938cb719494cb9b13a963af094c, type: 3}
       propertyPath: inventorySlots.Array.data[5]
       value: 
-      objectReference: {fileID: 979514212204933610}
+      objectReference: {fileID: 3926961213622810646}
     - target: {fileID: 5266453795972414909, guid: 82242938cb719494cb9b13a963af094c, type: 3}
       propertyPath: inventorySlots.Array.data[6]
       value: 
-      objectReference: {fileID: 3145093686606872154}
+      objectReference: {fileID: 3929988849875362934}
     - target: {fileID: 5266453795972414909, guid: 82242938cb719494cb9b13a963af094c, type: 3}
       propertyPath: inventorySlots.Array.data[7]
       value: 
-      objectReference: {fileID: 3998883692420498093}
+      objectReference: {fileID: 8862258072748433606}
     - target: {fileID: 5266453795972414909, guid: 82242938cb719494cb9b13a963af094c, type: 3}
       propertyPath: inventorySlots.Array.data[8]
       value: 
-      objectReference: {fileID: 7290112469713095354}
+      objectReference: {fileID: 5459898455485741484}
     - target: {fileID: 5266453795972414909, guid: 82242938cb719494cb9b13a963af094c, type: 3}
       propertyPath: inventorySlots.Array.data[9]
       value: 
-      objectReference: {fileID: 246959646875578070}
+      objectReference: {fileID: 6642141128053104120}
     - target: {fileID: 5266453795972414909, guid: 82242938cb719494cb9b13a963af094c, type: 3}
       propertyPath: inventorySlots.Array.data[10]
       value: 
-      objectReference: {fileID: 5986375074716984042}
+      objectReference: {fileID: 1708004318627534370}
     - target: {fileID: 5266453795972414909, guid: 82242938cb719494cb9b13a963af094c, type: 3}
       propertyPath: inventorySlots.Array.data[11]
       value: 
-      objectReference: {fileID: 5111130755713019779}
+      objectReference: {fileID: 979514212204933610}
     - target: {fileID: 5266453795972414909, guid: 82242938cb719494cb9b13a963af094c, type: 3}
       propertyPath: inventorySlots.Array.data[12]
       value: 
-      objectReference: {fileID: 589756363724240981}
+      objectReference: {fileID: 3145093686606872154}
     - target: {fileID: 5266453795972414909, guid: 82242938cb719494cb9b13a963af094c, type: 3}
       propertyPath: inventorySlots.Array.data[13]
       value: 
-      objectReference: {fileID: 1489769473573293009}
+      objectReference: {fileID: 3998883692420498093}
     - target: {fileID: 5266453795972414909, guid: 82242938cb719494cb9b13a963af094c, type: 3}
       propertyPath: inventorySlots.Array.data[14]
       value: 
-      objectReference: {fileID: 9086153594826633226}
+      objectReference: {fileID: 7290112469713095354}
     - target: {fileID: 5266453795972414909, guid: 82242938cb719494cb9b13a963af094c, type: 3}
       propertyPath: inventorySlots.Array.data[15]
       value: 
-      objectReference: {fileID: 4718439607284935342}
+      objectReference: {fileID: 246959646875578070}
     - target: {fileID: 5266453795972414909, guid: 82242938cb719494cb9b13a963af094c, type: 3}
       propertyPath: inventorySlots.Array.data[16]
       value: 
-      objectReference: {fileID: 1645635552610287457}
+      objectReference: {fileID: 5986375074716984042}
     - target: {fileID: 5266453795972414909, guid: 82242938cb719494cb9b13a963af094c, type: 3}
       propertyPath: inventorySlots.Array.data[17]
       value: 
-      objectReference: {fileID: 1604103157396934383}
+      objectReference: {fileID: 5111130755713019779}
     - target: {fileID: 5266453795972414909, guid: 82242938cb719494cb9b13a963af094c, type: 3}
       propertyPath: inventorySlots.Array.data[18]
       value: 
-      objectReference: {fileID: 6351565175786109427}
+      objectReference: {fileID: 589756363724240981}
     - target: {fileID: 5266453795972414909, guid: 82242938cb719494cb9b13a963af094c, type: 3}
       propertyPath: inventorySlots.Array.data[19]
       value: 
-      objectReference: {fileID: 8487921652668112996}
+      objectReference: {fileID: 1489769473573293009}
     - target: {fileID: 5266453795972414909, guid: 82242938cb719494cb9b13a963af094c, type: 3}
       propertyPath: inventorySlots.Array.data[20]
       value: 
-      objectReference: {fileID: 4362776971877667080}
+      objectReference: {fileID: 9086153594826633226}
     - target: {fileID: 5266453795972414909, guid: 82242938cb719494cb9b13a963af094c, type: 3}
       propertyPath: inventorySlots.Array.data[21]
       value: 
-      objectReference: {fileID: 3852437445301341497}
+      objectReference: {fileID: 4718439607284935342}
     - target: {fileID: 5266453795972414909, guid: 82242938cb719494cb9b13a963af094c, type: 3}
       propertyPath: inventorySlots.Array.data[22]
       value: 
-      objectReference: {fileID: 382189497820733923}
+      objectReference: {fileID: 1645635552610287457}
     - target: {fileID: 5266453795972414909, guid: 82242938cb719494cb9b13a963af094c, type: 3}
       propertyPath: inventorySlots.Array.data[23]
       value: 
-      objectReference: {fileID: 2736887324937380807}
+      objectReference: {fileID: 1604103157396934383}
     - target: {fileID: 5266453795972414909, guid: 82242938cb719494cb9b13a963af094c, type: 3}
       propertyPath: inventorySlots.Array.data[24]
       value: 
-      objectReference: {fileID: 8133425334724332607}
+      objectReference: {fileID: 6351565175786109427}
     - target: {fileID: 5266453795972414909, guid: 82242938cb719494cb9b13a963af094c, type: 3}
       propertyPath: inventorySlots.Array.data[25]
       value: 
-      objectReference: {fileID: 6323930530977860010}
+      objectReference: {fileID: 8487921652668112996}
     - target: {fileID: 5266453795972414909, guid: 82242938cb719494cb9b13a963af094c, type: 3}
       propertyPath: inventorySlots.Array.data[26]
       value: 
-      objectReference: {fileID: 2021884660961075624}
+      objectReference: {fileID: 4362776971877667080}
     - target: {fileID: 5266453795972414909, guid: 82242938cb719494cb9b13a963af094c, type: 3}
       propertyPath: inventorySlots.Array.data[27]
+      value: 
+      objectReference: {fileID: 3852437445301341497}
+    - target: {fileID: 5266453795972414909, guid: 82242938cb719494cb9b13a963af094c, type: 3}
+      propertyPath: inventorySlots.Array.data[28]
+      value: 
+      objectReference: {fileID: 382189497820733923}
+    - target: {fileID: 5266453795972414909, guid: 82242938cb719494cb9b13a963af094c, type: 3}
+      propertyPath: inventorySlots.Array.data[29]
+      value: 
+      objectReference: {fileID: 2736887324937380807}
+    - target: {fileID: 5266453795972414909, guid: 82242938cb719494cb9b13a963af094c, type: 3}
+      propertyPath: inventorySlots.Array.data[30]
+      value: 
+      objectReference: {fileID: 8133425334724332607}
+    - target: {fileID: 5266453795972414909, guid: 82242938cb719494cb9b13a963af094c, type: 3}
+      propertyPath: inventorySlots.Array.data[31]
+      value: 
+      objectReference: {fileID: 6323930530977860010}
+    - target: {fileID: 5266453795972414909, guid: 82242938cb719494cb9b13a963af094c, type: 3}
+      propertyPath: inventorySlots.Array.data[32]
+      value: 
+      objectReference: {fileID: 2021884660961075624}
+    - target: {fileID: 5266453795972414909, guid: 82242938cb719494cb9b13a963af094c, type: 3}
+      propertyPath: inventorySlots.Array.data[33]
       value: 
       objectReference: {fileID: 3218264479664430937}
     - target: {fileID: 5437116186290207177, guid: 82242938cb719494cb9b13a963af094c, type: 3}
