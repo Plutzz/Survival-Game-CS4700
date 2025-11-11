@@ -17,5 +17,9 @@ MonoBehaviour:
   type: 0
   actionType: 0
   range: {x: 5, y: 4}
+  effects: []
   stackable: 1
-  image: {fileID: 21300000, guid: 7aaf3f543bdeaa14791d91f7c216a7ec, type: 3}
+  worldSprite: {fileID: 21300000, guid: 5cdc521af163a8541b7ad9a54eebbbee, type: 3}
+  worldScale: 1
+  heldSprite: {fileID: 0}
+  heldScale: 1
