@@ -14,10 +14,10 @@ public class InventoryManager : Singleton<InventoryManager>
     [SerializeField] private Transform inventorySlotsParent;
     [SerializeField] private InventorySlot[] hotbarSlots;
     [field: SerializeField] public InventoryItem heldItem { get; private set; }
-    
+
     public Action OnHeldItemChanged;
     public Action<ItemSO> OnItemAdded;
-    
+
     int selectedSlot = -1;
 
     private void Start()
@@ -54,10 +54,9 @@ public class InventoryManager : Singleton<InventoryManager>
 
     void ChangeSelectedSlot(int newValue)
     {
-        
         cursor.MoveToPosition(hotbarSlots[newValue].transform);
         InventoryItem inventoryItem = hotbarSlots[newValue].GetComponentInChildren<InventoryItem>();
-        Debug.Log("Holding new item: " + inventoryItem);   
+        // Debug.Log("Holding new item: " + inventoryItem + " at index " + newValue);
         heldItem = inventoryItem;
         selectedSlot = newValue;
         OnHeldItemChanged?.Invoke();
@@ -129,6 +128,7 @@ public class InventoryManager : Singleton<InventoryManager>
     public ItemSO GetSelectedItem(bool use)
     {
         InventorySlot slot = inventorySlots[selectedSlot];
+
         InventoryItem itemInSlot = slot.GetComponentInChildren<InventoryItem>();
         if (itemInSlot != null)
         {
@@ -146,6 +146,10 @@ public class InventoryManager : Singleton<InventoryManager>
                 }
             }
             return item;
+        }
+        else
+        {
+            Debug.LogWarning("GetSelectedItem: No InventoryItem found in hotbarSlots[" + selectedSlot + "]");
         }
         return null;
     }

@@ -42487,6 +42487,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Interaction: 0
   Interactable: 0
+  interactableItems:
+  - {fileID: 11400000, guid: b51398202437d09479c8ca7278f36a65, type: 2}
+  inventoryManager: {fileID: 5266453795972414909, guid: 82242938cb719494cb9b13a963af094c, type: 3}
+  canInteract: 0
 --- !u!58 &1162270676
 CircleCollider2D:
   m_ObjectHideFlags: 0

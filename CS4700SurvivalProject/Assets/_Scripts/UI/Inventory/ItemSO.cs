@@ -28,7 +28,8 @@ public enum ItemType
 {
     BuildingBlock,
     Tool,
-    Consumable
+    Consumable,
+    Fillable
 }
 
 public enum ActionType

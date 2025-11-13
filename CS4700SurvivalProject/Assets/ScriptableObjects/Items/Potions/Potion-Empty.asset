@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   ID: 0
   tile: {fileID: 0}
-  type: 0
+  type: 3
   actionType: 0
   range: {x: 5, y: 4}
   effects: []
