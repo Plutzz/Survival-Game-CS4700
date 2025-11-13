@@ -12,11 +12,10 @@ public class AudioManager : Singleton<AudioManager>
     public AudioMixerGroup masterMixerGroup;
     [Header("Sounds")]
     public SoundAudioClip[] soundAudioClipsArray; 
-    public MMF_Player InteractSFX;
-
+    
     [SerializeField]
-    private Queue<UnityEngine.GameObject> soundAudioClipsQueue;
-    private UnityEngine.GameObject musicGameObject;
+    private Queue<GameObject> soundAudioClipsQueue;
+    private GameObject musicGameObject;
 
     [SerializeField]
     private int maxAudioSources = 10;
@@ -28,22 +27,13 @@ public class AudioManager : Singleton<AudioManager>
 
     public enum Sounds
     {
-        TestSound,
-        Shot,
-        Bell,
-        Reload,
-        DoorOpen,
-        DoorClosed,
+        PlayerHurt,
+        PlayerHeal,
     }
 
     public enum Songs
     {
-        MenuSong,
-        InterrogationSong,
-        JudgementSong,
-        GunpointSong,
-        WanderSong,
-        Outro
+
     }
 
     private void Start()
@@ -135,7 +125,7 @@ public class AudioManager : Singleton<AudioManager>
     {
         if (musicGameObject == null)
         {
-            musicGameObject = new UnityEngine.GameObject("Music");
+            musicGameObject = new GameObject("Music");
             musicGameObject.AddComponent<AudioSource>();
             DontDestroyOnLoad(musicGameObject);
         }

@@ -51,7 +51,7 @@ public class Enemy : NetworkBehaviour, IDamageable
     public virtual void Die()
     {
         isAlive.Value = false;
-        Invoke(nameof(Destroy), 3f);
+        Invoke(nameof(Destroy), 1f);
     }
     
     private void Destroy()

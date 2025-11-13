@@ -12,6 +12,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 75ba72ea01fa1c64fb8b6e7acc5f298e, type: 3}
   m_Name: HealBuff
   m_EditorClassIdentifier: 
-  numTicks: 1
-  delayBetweenTicks: 0.5
-  healAmount: 10
+  numTicks: 3
+  delayBetweenTicks: 0.1
+  healAmount: 5
