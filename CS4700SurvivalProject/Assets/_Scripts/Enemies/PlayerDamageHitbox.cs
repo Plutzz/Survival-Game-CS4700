@@ -8,7 +8,6 @@ public class PlayerDamageHitbox : MonoBehaviour
     
     private void OnTriggerEnter2D(Collider2D other)
     {
-        Debug.Log("Entered Hitbox of" + other.gameObject.name);
         if (other.TryGetComponent(out PlayerHealth player))
         {
             player.TakeDamage(damage);

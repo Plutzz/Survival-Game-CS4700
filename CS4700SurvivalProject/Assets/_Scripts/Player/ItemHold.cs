@@ -25,6 +25,7 @@ public class ItemHold : NetworkBehaviour
 
     private void ChangeItem()
     {
+        Debug.Log($"Change sprite to {InventoryManager.Instance.heldItem}");
         if (InventoryManager.Instance.heldItem == null)
         {
             itemSpriteRenderer.sprite = null;

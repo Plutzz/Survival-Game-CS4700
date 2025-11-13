@@ -26,14 +26,12 @@ public class DamageBox : NetworkBehaviour
     
     private void OnTriggerEnter2D(Collider2D other)
     {
-        Debug.Log("Owner of object: " + ownerNetworkObject.IsOwner);
         
         if (!ownerNetworkObject.IsOwner) return;
         
         IDamageable damageable = other.GetComponent<IDamageable>();
         if (damageable != null && !hasBeenDamaged.Contains(damageable))
         {
-            Debug.Log("HIT OBJECT");
             hasBeenDamaged.Add(damageable);
             damageable.TakeDamage(damage);
         }
