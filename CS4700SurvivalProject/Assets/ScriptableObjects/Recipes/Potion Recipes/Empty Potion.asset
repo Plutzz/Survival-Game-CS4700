@@ -1,0 +1,24 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 608033ff7d2a8ee4c926230b94c9452f, type: 3}
+  m_Name: Empty Potion
+  m_EditorClassIdentifier: 
+  requiredPattern:
+  - {fileID: 11400000, guid: cde87b98b94f81f409d72e27aa4cae6c, type: 2}
+  - {fileID: 0}
+  - {fileID: 11400000, guid: cde87b98b94f81f409d72e27aa4cae6c, type: 2}
+  - {fileID: 0}
+  - {fileID: 11400000, guid: cde87b98b94f81f409d72e27aa4cae6c, type: 2}
+  - {fileID: 0}
+  - {fileID: 11400000, guid: cde87b98b94f81f409d72e27aa4cae6c, type: 2}
+  - {fileID: 0}
+  resultItem: {fileID: 11400000, guid: b51398202437d09479c8ca7278f36a65, type: 2}
