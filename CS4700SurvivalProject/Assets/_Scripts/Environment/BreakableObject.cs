@@ -6,7 +6,7 @@ using Unity.Netcode;
 using UnityEngine.Rendering;
 using UnityEngine.Serialization;
 
-public class Tree : NetworkBehaviour, IDamageable
+public class BreakableObject : NetworkBehaviour, IDamageable
 {
     [SerializeField] private int maxHealth = 10;
     private NetworkVariable<int> health = new NetworkVariable<int>(100);

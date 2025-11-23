@@ -18,6 +18,16 @@ public class ItemHold : NetworkBehaviour
         InventoryManager.Instance.OnHeldItemChanged += ChangeItem;
     }
 
+    public override void OnNetworkSpawn()
+    {
+        Debug.Log($"OWNER? {IsOwner} WHO {NetworkObject.OwnerClientId} LOCAL ID: {NetworkManager.Singleton.LocalClientId}");
+        if (!IsOwner)
+        {
+            enabled = false;
+            return;
+        }
+    }
+
     private void OnDisable()
     {
         InventoryManager.Instance.OnHeldItemChanged -= ChangeItem;
@@ -25,6 +35,7 @@ public class ItemHold : NetworkBehaviour
 
     private void ChangeItem()
     {
+        Debug.Log($"Change sprite to {InventoryManager.Instance.heldItem}");
         if (InventoryManager.Instance.heldItem == null)
         {
             itemSpriteRenderer.sprite = null;

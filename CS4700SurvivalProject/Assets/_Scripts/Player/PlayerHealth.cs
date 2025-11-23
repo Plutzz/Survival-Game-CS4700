@@ -12,6 +12,15 @@ public class PlayerHealth : NetworkBehaviour
     {
         if(!IsOwner) return;
         health.Value -= damage;
+        AudioManager.Instance.PlaySound(AudioManager.Sounds.PlayerHurt);
+        UIManager.Instance.SetHealthBar(health.Value, maxHealth);
+    }
+
+    public void Heal(int heal)
+    {
+        if(!IsOwner) return;
+        health.Value += heal;
+        AudioManager.Instance.PlaySound(AudioManager.Sounds.PlayerHeal);
         UIManager.Instance.SetHealthBar(health.Value, maxHealth);
     }
 }

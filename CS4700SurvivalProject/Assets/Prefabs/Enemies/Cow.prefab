@@ -144,6 +144,7 @@ MonoBehaviour:
   hitFeedback: {fileID: 7410217852544335729}
   deathParticles: {fileID: 2148348738571379631}
   deathAudio: {fileID: 579719192410812669}
+  damageCollider: {fileID: 2262656158899094915}
   graphics: {fileID: 8380921524035733102}
   <MoveState>k__BackingField:
     animationClip: {fileID: 7400000, guid: c73ad59fe0ce32141b9ac284e680eceb, type: 2}

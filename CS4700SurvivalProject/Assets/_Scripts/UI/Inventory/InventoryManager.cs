@@ -19,7 +19,6 @@ public class InventoryManager : Singleton<InventoryManager>
     public Action<ItemSO> OnItemAdded;
 
     int selectedSlot = -1;
-
     private void Start()
     {
         ChangeSelectedSlot(0);
@@ -56,8 +55,15 @@ public class InventoryManager : Singleton<InventoryManager>
     {
         cursor.MoveToPosition(hotbarSlots[newValue].transform);
         InventoryItem inventoryItem = hotbarSlots[newValue].GetComponentInChildren<InventoryItem>();
-        // Debug.Log("Holding new item: " + inventoryItem + " at index " + newValue);
-        heldItem = inventoryItem;
+        if (inventoryItem != null && inventoryItem.count <= 0)
+        {
+            heldItem = null;
+        }
+        else
+        {
+            heldItem = inventoryItem;
+        }
+        Debug.Log("Holding new item: " + inventoryItem);   
         selectedSlot = newValue;
         OnHeldItemChanged?.Invoke();
     }
@@ -83,6 +89,7 @@ public class InventoryManager : Singleton<InventoryManager>
                 itemInSlot.count++;
                 itemInSlot.RefreshCount();
                 OnItemAdded?.Invoke(item);
+                ChangeSelectedSlot(selectedSlot);
                 return true;
             }
         }
@@ -95,6 +102,7 @@ public class InventoryManager : Singleton<InventoryManager>
             {
                 SpawnNewItem(item, slot);
                 OnItemAdded?.Invoke(item);
+                ChangeSelectedSlot(selectedSlot);
                 return true;
             }
         }

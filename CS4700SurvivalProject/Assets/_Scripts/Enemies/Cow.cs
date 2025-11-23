@@ -11,7 +11,7 @@ public class Cow : Enemy
     [SerializeField] private MMF_Player hitFeedback;
     [SerializeField] private ParticleSystem deathParticles;
     [SerializeField] private AudioSource deathAudio;
-
+    [SerializeField] private Collider2D damageCollider;
     [SerializeField] private GameObject graphics;
     
     [field: Header("State Machine")]
@@ -58,6 +58,7 @@ public class Cow : Enemy
         graphics.SetActive(false);
         deathParticles.GetComponent<Renderer>().sortingOrder = graphics.GetComponent<Renderer>().sortingOrder + 1;
         deathParticles.Play();
+        damageCollider.enabled = false;
         GetComponent<Collider2D>().enabled = false;
         deathAudio.Play();
     }
