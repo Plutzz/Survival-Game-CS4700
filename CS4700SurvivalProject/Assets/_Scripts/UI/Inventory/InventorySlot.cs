@@ -1,7 +1,7 @@
 using UnityEngine;
 using UnityEngine.EventSystems;
 
-public class InventorySlot : MonoBehaviour, IDropHandler, IPointerEnterHandler, IPointerExitHandler
+public class InventorySlot : MonoBehaviour, IDropHandler
 {
     public bool isResultSlot = false;
     public void OnDrop(PointerEventData eventData)
@@ -119,17 +119,5 @@ public class InventorySlot : MonoBehaviour, IDropHandler, IPointerEnterHandler, 
                 Debug.LogWarning("Dropped item had no valid parent to swap with.");
             }
         }
-    }
-
-    public void OnPointerEnter(PointerEventData eventData)
-    {
-        Debug.Log("Mouse Enter");
-        InventoryManager.Instance.ShowTooltip(this);
-    }
-
-    public void OnPointerExit(PointerEventData eventData)
-    {
-        Debug.Log("Mouse Exit");
-        InventoryManager.Instance.HideTooltip(this);
     }
 }
