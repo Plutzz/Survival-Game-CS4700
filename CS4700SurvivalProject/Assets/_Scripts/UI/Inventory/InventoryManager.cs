@@ -1,8 +1,10 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 using UnityEngine.Serialization;
+using UnityEngine.UI;
 
 public class InventoryManager : Singleton<InventoryManager>
 {
@@ -18,9 +20,16 @@ public class InventoryManager : Singleton<InventoryManager>
     public Action OnHeldItemChanged;
     public Action<ItemSO> OnItemAdded;
 
+    private InventorySlot _hoveredSlot;
+    [Header("Tooltip Menu")]
+    [SerializeField] private GameObject _tooltipMenu;
+    [SerializeField] private TextMeshProUGUI _itemNameText, _itemDescriptionText;
+    [SerializeField] private Image _itemImage;
+    [SerializeField] private Vector3 _tooltipOffset;
     int selectedSlot = -1;
     private void Start()
     {
+        _tooltipMenu.SetActive(false);
         ChangeSelectedSlot(0);
     }
 
@@ -160,6 +169,33 @@ public class InventoryManager : Singleton<InventoryManager>
             Debug.LogWarning("GetSelectedItem: No InventoryItem found in hotbarSlots[" + selectedSlot + "]");
         }
         return null;
+    }
+
+
+    public void ShowTooltip(InventorySlot slot)
+    {
+        // Populate and show menu
+        InventoryItem itemInSlot = slot.GetComponentInChildren<InventoryItem>();
+        if (itemInSlot == null) return;
+        
+        _itemNameText.text = itemInSlot.item.name;
+        _itemDescriptionText.text = "Test description";
+        _itemImage.sprite = itemInSlot.item.worldSprite;
+        
+        _hoveredSlot = slot;
+        
+        Vector3 offset = slot.transform.position.x < Screen.width / 2f ? _tooltipOffset : -_tooltipOffset;
+        _tooltipMenu.transform.position = slot.transform.position + offset;
+        _tooltipMenu.SetActive(true);
+    }
+
+    public void HideTooltip(InventorySlot slot)
+    {
+        if (slot != _hoveredSlot) return;
+        
+        _hoveredSlot = null;
+        _tooltipMenu.SetActive(false);
+        
     }
 
 }
