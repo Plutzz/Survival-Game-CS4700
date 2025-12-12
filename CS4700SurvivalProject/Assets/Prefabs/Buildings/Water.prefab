@@ -116,7 +116,6 @@ GameObject:
   - component: {fileID: 440802069022120641}
   - component: {fileID: 3840782726396428072}
   - component: {fileID: 2657635483634455339}
-  - component: {fileID: 1899954850893157767}
   m_Layer: 0
   m_Name: Water
   m_TagString: Untagged
@@ -227,23 +226,3 @@ CircleCollider2D:
   m_Offset: {x: 0.018324852, y: -0.022906661}
   serializedVersion: 2
   m_Radius: 1.0372926
---- !u!114 &1899954850893157767
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8653448122472151147}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7b769ad8eafa2684aa8117ae3b17f82c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  isWater: 1
-  isMud: 0
-  isSaltWater: 0
-  isMob: 0
-  waterPotion: {fileID: 11400000, guid: eea38c2d693d5494888ed9c354b4b38d, type: 2}
-  mudPotion: {fileID: 11400000, guid: c60f5f13e611e9e41a5e89e4a7366228, type: 2}
-  saltWaterPotion: {fileID: 11400000, guid: 9e8ab2157c2e35e44a021fffe3463979, type: 2}
-  mobPotion: {fileID: 11400000, guid: b7746f17f0a589f41a79cd61d34af28c, type: 2}
