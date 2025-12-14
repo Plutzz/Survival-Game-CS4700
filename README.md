@@ -1,3 +1,6 @@
+# Github Repository
+https://github.com/Plutzz/Survival-Game-CS4700
+
 # Lost
 
 ## Setup
