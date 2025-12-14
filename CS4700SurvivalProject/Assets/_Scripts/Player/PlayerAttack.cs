@@ -10,10 +10,12 @@ public class PlayerAttack : State<Player>
     [SerializeField] public AnimationClip Up, Right, Left, Down;
     [SerializeField] public float AttackTime = 0.5f;
     [SerializeField] public DamageBox WeaponHitbox;
+    [SerializeField] private GameObject slashFX;
 
     public override void EnterState()
     {
         base.EnterState();
+        slashFX.SetActive(true);
         WeaponHitbox.gameObject.SetActive(true);
         WeaponHitbox.ClearHasBeenDamaged();
         if (Mathf.Abs(Context.lookDir.Value.x) > Mathf.Abs(Context.lookDir.Value.y))
@@ -58,6 +60,8 @@ public class PlayerAttack : State<Player>
     {
         base.ExitState();
         WeaponHitbox.gameObject.SetActive(false);
+        slashFX.SetActive(false);
+
         
     }
     public override void UpdateState()
